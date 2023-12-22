@@ -26,7 +26,7 @@ module.exports = {
       review: {
         type: Sequelize.STRING
       },
-      starts: {
+      stars: {
         type: Sequelize.INTEGER
       },
       createdAt: {
