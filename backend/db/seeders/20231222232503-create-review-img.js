@@ -13,15 +13,15 @@ module.exports = {
     await ReviewImage.bulkCreate([
       {
         reviewId: 1,
-        url: "ReviewImage: www.test_url1.com"
+        url: "www.reviewImage_test_url1.com"
       },
       {
         reviewId: 2,
-        url: "ReviewImage: www.test_url2.com"
+        url: "www.reviewImage_test_url2.com"
       },
       {
         reviewId: 3,
-        url: "ReviewImage: www.test_url3.com"
+        url: "www.reviewImage_test_url3.com"
       },
 
     ], { validate: true });
