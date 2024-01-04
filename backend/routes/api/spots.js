@@ -1,8 +1,9 @@
 // backend/routes/api/users.js
 const express = require('express');
+const { Op } = require('sequelize');
 
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { Spot, Review, SpotImage, User, ReviewImage } = require('../../db/models');
+const { Spot, Review, SpotImage, User, ReviewImage, Booking } = require('../../db/models');
 
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
@@ -52,7 +53,6 @@ const spotValidator = [
   handleValidationErrors
 ];
 
-/* --------------------------------- */
 const reviewValidator = [
   check('review')
     .exists({ checkFalsy: true })
@@ -63,7 +63,136 @@ const reviewValidator = [
     .withMessage('Stars must be an integer from 1 to 5'),
   handleValidationErrors
 ];
+const bookingValidator = [
+  check('startDate')
+    .exists({ checkFalsy: true })
+    .isLength({ min: 1 })
+    .custom(async value => {
+      const startDate = new Date(value)
+      const currentDate = new Date()
+      if (currentDate > startDate) throw new Error("startDate cannot be in the past")
+    }),
+  check('endDate')
+    .exists({ checkFalsy: true })
+    .isLength({ min: 1 })
+    .custom(async (value, req) => {
+      // console.log('====>',req.req.body)
+      const body = req.req.body
+      const startDate = new Date(body.startDate)
+      const endDate = new Date(body.endDate)
+      // console.log('====>', startDate)
+      // console.log('====>', endDate)
+      if (startDate >= endDate) {
+        throw new Error("endDate cannot be on or before startDate")
+      }
+      // const endDate = new Date(value)
+      // const currentDate = new Date()
+      // if (currentDate > inputDate) throw new Error("startDate cannot be in the past")
+    }),
+  handleValidationErrors
+];
 
+/* --------------------------------- */
+router.post('/:spotId(\\d+)/bookings', requireAuth, bookingValidator, async (req, res) => {
+  let { startDate, endDate } = req.body
+  const booking = await Spot.findByPk(req.params.spotId)
+
+  if (!booking) {
+    res.status(404)
+    return res.json({
+      "message": "Spot couldn't be found"
+    })
+  }
+
+  if (booking.ownerId === req.user.id) {
+    res.status(403)
+    return res.json({
+      message: 'Spot must NOT belong to the current user'
+    })
+  }
+
+  // const currentDate = new Date();
+  startDate = new Date(startDate)
+  endDate = new Date(endDate)
+
+  const checkBooking = await Booking.findOne({
+    where: {
+      spotId: req.params.spotId,
+      [Op.or]: [
+        {
+          [Op.and]: [{ startDate: { [Op.lte]: startDate } }, { endDate: { [Op.gte]: startDate } }],
+        },
+        {
+          [Op.and]: [{ startDate: { [Op.lte]: endDate } }, { endDate: { [Op.gte]: endDate } }],
+        },
+      ],
+
+    }
+  })
+
+  if (checkBooking) {
+    res.status(403)
+    return res.json({
+      "message": "Sorry, this spot is already booked for the specified dates",
+      "errors": {
+        "startDate": "Start date conflicts with an existing booking",
+        "endDate": "End date conflicts with an existing booking"
+      }
+    })
+  }
+
+  const createBooking = await Booking.create({
+    spotId: req.params.spotId,
+    userId: req.user.id,
+    startDate,
+    endDate
+  });
+
+
+  res.status(200)
+  res.json({
+    ...createBooking.dataValues
+  })
+})
+/* --------------------------------- */
+router.get('/:spotId(\\d+)/bookings', requireAuth, async (req, res) => {
+  const spot = await Spot.findByPk(req.params.spotId)
+
+  if (!spot) {
+    res.status(404)
+    return res.json({
+      "message": "Spot couldn't be found"
+    })
+  }
+
+  let isOwner;
+  if (spot.ownerId === req.user.id) {
+    // console.log('Owner of the spot')
+    isOwner = await Booking.findAll({
+      where: {
+        spotId: req.params.spotId
+      },
+      include: {
+        model: User,
+        attributes: ['id', 'firstName', 'lastName']
+      }
+    })
+  }
+  else {
+    // console.log('NOT owner of the spot')
+    isOwner = await Booking.findAll({
+      where: {
+        spotId: req.params.spotId
+      },
+      attributes: ['spotId', 'startDate', 'endDate']
+    })
+  }
+
+  res.status(200)
+  res.json({
+    Bookings: isOwner
+  })
+})
 /* --------------------------------- */
 router.post('/:spotId(\\d+)/reviews', requireAuth, reviewValidator, async (req, res) => {
   const { review, stars } = req.body;
@@ -76,7 +205,7 @@ router.post('/:spotId(\\d+)/reviews', requireAuth, reviewValidator, async (req, 
 
   if (!spot) {
     res.status(404)
-    res.json({
+    return res.json({
       "message": "Spot couldn't be found"
     })
   }
@@ -128,10 +257,10 @@ router.get('/:spotId(\\d+)/reviews', async (req, res) => {
   })
 
   if (!spot) {
-    res.status(404),
-      res.json({
-        message: "Spot couldn't be found"
-      })
+    res.status(404)
+    return res.json({
+      message: "Spot couldn't be found"
+    })
   }
   res.json({
     Reviews: spot.Reviews
@@ -147,7 +276,7 @@ router.delete('/:spotId(\\d+)', requireAuth, async (req, res) => {
 
   if (!spot) {
     res.status(404)
-    res.json({
+    return res.json({
       message: "Spot couldn't be found"
     });
   }
@@ -172,7 +301,7 @@ router.put('/:spotId(\\d+)', requireAuth, spotValidator, async (req, res) => {
 
   if (!spot) {
     res.status(404)
-    res.json({
+    return res.json({
       message: "Spot couldn't be found"
     });
   }
@@ -217,7 +346,7 @@ router.post('/:spotId/images', requireAuth, async (req, res) => {
 
   if (!spot) {
     res.status(404)
-    res.json({
+    return res.json({
       message: "Spot couldn't be found"
     });
   };
@@ -272,7 +401,7 @@ router.get('/:spotId(\\d+)', async (req, res) => {
 
   if (!spots) {
     res.status(404)
-    res.json({
+    return res.json({
       message: "Spot couldn't be found"
     });
   };
@@ -315,7 +444,7 @@ router.get('/current', requireAuth, async (req, res) => {
   }
 
   spots.forEach(spot => {
-    console.log('====>',spot.dataValues.SpotImages[0])
+    // console.log('====>', spot.dataValues.SpotImages[0])
     if (spot.dataValues.SpotImages[0]) {
       spot.dataValues.previewImage = spot.SpotImages[0].url;
     }

@@ -29,7 +29,7 @@ router.delete('/:reivewId(\\d+)', requireAuth, async (req,res)=>{
 
   if(!review){
     res.status(404)
-    res.json({
+    return res.json({
       "message": "Review couldn't be found"
     })
   }
@@ -50,7 +50,7 @@ router.put('/:reivewId(\\d+)', requireAuth, editreviewValidator, async (req,res)
 
   if(!editreview){
     res.status(404)
-    res.json({
+    return res.json({
       "message": "Review couldn't be found"
     })
   }
@@ -76,7 +76,7 @@ router.post('/:reviewId/images', requireAuth, async (req, res) => {
 
   if (!review) {
     res.status(404)
-    res.json({
+    return res.json({
       "message": "Review couldn't be found"
     })
   }
@@ -126,7 +126,7 @@ router.get('/current', requireAuth, async (req, res) => {
   for (r of Reviews) {
     r.toJSON()
   }
-  console.log(Reviews)
+  // console.log(Reviews)
   const spot = r.dataValues.Spot.dataValues
   spot.previewImage = spot.SpotImages[0].url || 'No preview image'
   delete spot.SpotImages
