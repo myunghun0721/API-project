@@ -19,6 +19,7 @@ const editreviewValidator = [
     .withMessage('Stars must be an integer from 1 to 5'),
   handleValidationErrors
 ];
+/* --------------------------------- */
 router.delete('/:reivewId(\\d+)', requireAuth, async (req,res)=>{
   const review = await Review.findByPk(req.params.reivewId, {
     where:{
@@ -38,6 +39,7 @@ router.delete('/:reivewId(\\d+)', requireAuth, async (req,res)=>{
     "message": "Successfully deleted"
   })
 })
+/* --------------------------------- */
 router.put('/:reivewId(\\d+)', requireAuth, editreviewValidator, async (req,res)=>{
   const { review, stars } = req.body
   const editreview = await Review.findByPk(req.params.reivewId, {
@@ -60,6 +62,7 @@ router.put('/:reivewId(\\d+)', requireAuth, editreviewValidator, async (req,res)
     ...editreview.dataValues
   })
 })
+/* --------------------------------- */
 router.post('/:reviewId/images', requireAuth, async (req, res) => {
   const { url } = req.body
   const review = await Review.findByPk(req.params.reviewId, {
@@ -95,6 +98,7 @@ router.post('/:reviewId/images', requireAuth, async (req, res) => {
     url
   })
 })
+/* --------------------------------- */
 router.get('/current', requireAuth, async (req, res) => {
   const Reviews = await Review.findAll({
     include: [{
