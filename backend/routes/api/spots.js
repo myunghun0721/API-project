@@ -52,6 +52,7 @@ const spotValidator = [
   handleValidationErrors
 ];
 
+/* --------------------------------- */
 const reviewValidator = [
   check('review')
     .exists({ checkFalsy: true })
@@ -91,6 +92,7 @@ router.post('/:spotId(\\d+)/reviews', requireAuth, reviewValidator, async (req, 
       })
     }
   }
+
   const createReview = await Review.create({
     spotId: spot.id,
     userId: req.user.id,
