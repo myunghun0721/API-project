@@ -2,10 +2,11 @@
 const express = require('express');
 
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { Spot, Review, SpotImage, User } = require('../../db/models');
+const { Spot, Review, SpotImage, User, ReviewImage } = require('../../db/models');
 
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
+const e = require('express');
 
 const router = express.Router();
 
@@ -51,6 +52,89 @@ const spotValidator = [
   handleValidationErrors
 ];
 
+const reviewValidator = [
+  check('review')
+    .exists({ checkFalsy: true })
+    .isLength({ min: 1 })
+    .withMessage('Review text is required'),
+  check('stars')
+    .isFloat({ min: 1, max: 5 })
+    .withMessage('Stars must be an integer from 1 to 5'),
+  handleValidationErrors
+];
+
+/* --------------------------------- */
+router.post('/:spotId(\\d+)/reviews', requireAuth, reviewValidator, async (req, res) => {
+  const { review, stars } = req.body;
+
+  const spot = await Spot.findByPk(req.params.spotId, {
+    include: {
+      model: Review
+    }
+  })
+
+  if (!spot) {
+    res.status(404)
+    res.json({
+      "message": "Spot couldn't be found"
+    })
+  }
+
+  // console.log(spot.Reviews)
+  for (const user of spot.Reviews) {
+    // console.log(user.userId)
+    if (user.userId == req.user.id) {
+      res.status(500)
+      return res.json({
+        "message": "User already has a review for this spot",
+        // message: spot.Reviews[0].userId
+      })
+    }
+  }
+  const createReview = await Review.create({
+    spotId: spot.id,
+    userId: req.user.id,
+    review,
+    stars
+  });
+
+
+  res.status(201)
+  res.json({
+    id: createReview.id,
+    spotId: createReview.spotId,
+    userId: createReview.userId,
+    review: createReview.review,
+    stars: createReview.stars,
+    createdAt: createReview.createdAt,
+    updatedAt: createReview.updatedAt
+  })
+})
+/* --------------------------------- */
+router.get('/:spotId(\\d+)/reviews', async (req, res) => {
+  const spot = await Spot.findByPk(req.params.spotId, {
+    include: {
+      model: Review,
+      include: [{
+        model: User,
+        attributes: ['id', 'firstName', 'lastName']
+      }, {
+        model: ReviewImage,
+        attributes: ['id', 'url']
+      }],
+    }
+  })
+
+  if (!spot) {
+    res.status(404),
+      res.json({
+        message: "Spot couldn't be found"
+      })
+  }
+  res.json({
+    Reviews: spot.Reviews
+  })
+})
 /* --------------------------------- */
 router.delete('/:spotId(\\d+)', requireAuth, async (req, res) => {
   const spot = await Spot.findByPk(req.params.spotId, {
@@ -229,8 +313,15 @@ router.get('/current', requireAuth, async (req, res) => {
   }
 
   spots.forEach(spot => {
-    console.log(spot)
-    spot.dataValues.previewImage = spot.SpotImages[0].url
+    console.log('====>',spot.dataValues.SpotImages[0])
+    if (spot.dataValues.SpotImages[0]) {
+      spot.dataValues.previewImage = spot.SpotImages[0].url;
+    }
+    else {
+      spot.dataValues.previewImage = 'No preview image';
+    }
+
+    // spot.dataValues.previewImage = spot.SpotImages[0].url || 'No preview image'
     delete spot.dataValues.SpotImages;
   })
 
