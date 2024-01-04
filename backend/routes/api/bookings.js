@@ -25,7 +25,7 @@ router.delete('/:bookingId', requireAuth, async (req, res) => {
     })
   }
   // console.log(booking.dataValues.Spot.dataValues)
-  if (booking.userId !== req.user.id && booking.dataValues.Spot.dataValues.ownerId !== req.user.id) {
+  if (booking.userId == req.user.id || booking.dataValues.Spot.dataValues.ownerId == req.user.id) {
     res.status(403)
     return res.json({
       message: 'Booking must belong to the current user or the Spot must belong to the current user'
