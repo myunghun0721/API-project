@@ -34,10 +34,10 @@ router.delete('/:reivewId(\\d+)', requireAuth, async (req, res) => {
     })
   }
 
-  if(review.userId !== req.user.id){
+  if (review.userId !== req.user.id) {
     res.status(403)
     return res.json({
-      message: 'Spot must belong to the current user'
+      message: 'Review must belong to the current user'
     });
   }
   await review.destroy();
@@ -55,6 +55,13 @@ router.put('/:reivewId(\\d+)', requireAuth, editreviewValidator, async (req, res
       userId: req.user.id
     },
   })
+
+  if (review.userId !== req.user.id) {
+    res.status(403)
+    res.json({
+      message: 'Review must belong to the current user'
+    })
+  }
 
   if (!editreview) {
     res.status(404)
@@ -81,6 +88,14 @@ router.post('/:reviewId/images', requireAuth, async (req, res) => {
       model: ReviewImage
     }
   })
+
+  if (review.userId !== req.user.id) {
+    res.status(403)
+    res.json({
+      message: 'Review must belong to the current user'
+    })
+  }
+
 
   if (!review) {
     res.status(404)
@@ -141,12 +156,25 @@ router.get('/current', requireAuth, async (req, res) => {
       spot.previewImage = 'No preview image';
     }
     const review = r.dataValues
-    if (review.ReviewImages.length >= 1) {
-      review.ReviewImages = review.ReviewImages[0].url;
+    // review.temp = []
+    // console.log(review.ReviewImages)
+    for (reviewimg of review.ReviewImages) {
+      const result = reviewimg.toJSON()
+      // review.temp.push(result)
+      // console.log(review.temp)
     }
-    else {
+    if (review.ReviewImages.length <= 0) {
       review.ReviewImages = 'No preview review image';
     }
+    // if (review.ReviewImages.length >= 1) {
+
+    //     console.log(review.ReviewImages)
+
+    //   // review.ReviewImages = review.ReviewImages[0].url;
+    // }
+    // else {
+    //   review.ReviewImages = 'No preview review image';
+    // }
 
 
     delete spot.SpotImages

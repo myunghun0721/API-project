@@ -67,8 +67,13 @@ const bookingValidator = [
   check('startDate')
     .exists({ checkFalsy: true })
     .isLength({ min: 1 })
-    .custom(async value => {
-      const startDate = new Date(value)
+    .custom(async (value, req)  => {
+      const body = req.req.body
+      if(body.startDate == body.endDate){
+        throw new Error("Start date and endDate cannot be the same")
+      }
+      const startDate = new Date(body.startDate)
+      const endDate = new Date(body.endDate)
       const currentDate = new Date()
       if (currentDate > startDate) throw new Error("startDate cannot be in the past")
     }),
@@ -78,6 +83,9 @@ const bookingValidator = [
     .custom(async (value, req) => {
       // console.log('====>',req.req.body)
       const body = req.req.body
+      if(body.startDate == body.endDate){
+        throw new Error("Start date and endDate cannot be the same")
+      }
       const startDate = new Date(body.startDate)
       const endDate = new Date(body.endDate)
       // console.log('====>', startDate)
@@ -415,6 +423,13 @@ router.post('/:spotId/images', requireAuth, async (req, res) => {
     });
   };
 
+  if (spot.ownerId !== req.user.id){
+    res.status(403)
+    return res.json({
+      message: 'Spot must belong to the current user'
+    })
+  }
+
   const createImage = await SpotImage.create({
     spotId: spot.id,
     url,
@@ -422,11 +437,11 @@ router.post('/:spotId/images', requireAuth, async (req, res) => {
   });
 
   res.status(200)
-  res.json([{
+  res.json({
     id: createImage.id,
     url: createImage.url,
     preview: createImage.preview
-  }])
+  })
 })
 
 /* --------------------------------- */
@@ -447,7 +462,7 @@ router.post('/', requireAuth, spotValidator, async (req, res) => {
   });
   res.status(201)
   res.json({
-    createSpot
+    ...createSpot.dataValues
   });
 
 })
@@ -470,10 +485,24 @@ router.get('/:spotId(\\d+)', async (req, res) => {
     });
   };
 
+  const reviews = await Review.findAll({
+    where: {
+      spotId: req.params.spotId
+    }
+  });
+
+  let total = 0;
+  for (const review of reviews) {
+    total++;
+  }
+
+  spots.dataValues.numReviews = total
   spots.dataValues.Owner = spots.dataValues.User
   delete spots.dataValues.User
-
-  res.json(spots)
+  delete spots.dataValues.Owner.dataValues.username
+  res.json(
+    spots
+  )
 })
 
 /* --------------------------------- */
@@ -518,6 +547,7 @@ router.get('/current', requireAuth, async (req, res) => {
 
     // spot.dataValues.previewImage = spot.SpotImages[0].url || 'No preview image'
     delete spot.dataValues.SpotImages;
+
   })
 
   res.json({
@@ -550,31 +580,31 @@ router.get('/', pageValidator, async (req, res) => {
   if (minPrice && maxPrice) {
     option.price = { [Op.between]: [minPrice, maxPrice] };
   }
-  else if(minPrice && !maxPrice){
-    option.price = {[Op.gte]: minPrice}
+  else if (minPrice && !maxPrice) {
+    option.price = { [Op.gte]: minPrice }
   }
-  else if(!minPrice && maxPrice){
-    option.price = {[Op.lte]: maxPrice}
+  else if (!minPrice && maxPrice) {
+    option.price = { [Op.lte]: maxPrice }
   }
 
   if (minLat && maxLat) {
     option.lat = { [Op.between]: [minLat, maxLat] };
   }
-  else if(minLat && !maxLat){
-    option.lat = {[Op.gte]: minLat}
+  else if (minLat && !maxLat) {
+    option.lat = { [Op.gte]: minLat }
   }
-  else if(!minLat && maxLat){
-    option.lat = {[Op.lte]: maxLat}
+  else if (!minLat && maxLat) {
+    option.lat = { [Op.lte]: maxLat }
   }
 
   if (minLng && maxLng) {
     option.lng = { [Op.between]: [minLng, maxLng] };
   }
-  else if(minLng && !maxLng){
-    option.lng = {[Op.gte]: minLng}
+  else if (minLng && !maxLng) {
+    option.lng = { [Op.gte]: minLng }
   }
-  else if(!minLng && maxLng){
-    option.lng = {[Op.lte]: maxLng}
+  else if (!minLng && maxLng) {
+    option.lng = { [Op.lte]: maxLng }
   }
 
   let spots = await Spot.findAll({

@@ -49,10 +49,12 @@ router.put('/:bookingId', requireAuth, async (req, res) => {
     })
   }
 
-  if (booking.ownerId === req.user.id) {
+  // console.log(booking.userId)
+  // console.log(req.user.id)
+  if (booking.userId !== req.user.id) {
     res.status(403)
     return res.json({
-      message: 'Spot must NOT belong to the current user'
+      message: 'Booking must belong to the current user'
     })
   }
 
@@ -110,9 +112,9 @@ router.delete('/:bookingId', requireAuth, async (req, res) => {
       "message": "Booking couldn't be found"
     })
   }
-  console.log('booking user id: ',booking.userId)
-  console.log('user id: ',req.user.id)
-  if (booking.userId !== req.user.id || booking.dataValues.Spot.dataValues.ownerId !== req.user.id) {
+  console.log('booking user id: ', booking.userId)
+  console.log('user id: ', req.user.id)
+  if (booking.userId !== req.user.id && booking.dataValues.Spot.dataValues.ownerId !== req.user.id) {
     res.status(403)
     return res.json({
       message: 'Booking must belong to the current user or the Spot must belong to the current user'
@@ -129,10 +131,10 @@ router.delete('/:bookingId', requireAuth, async (req, res) => {
     });
   }
 
-  if(booking.userId !== req.user.id){
+  if (booking.userId !== req.user.id) {
     res.status(403)
     return res.json({
-      message: 'Spot must belong to the current user'
+      message: 'Booking must belong to the current user'
     });
   }
   await booking.destroy();
