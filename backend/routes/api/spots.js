@@ -280,7 +280,12 @@ router.delete('/:spotId(\\d+)', requireAuth, async (req, res) => {
       message: "Spot couldn't be found"
     });
   }
-
+  if (spot.ownerId !== req.user.id) {
+    res.status(403)
+    return res.json({
+      message: 'Spot must belong to the current user'
+    });
+  }
   await spot.destroy();
 
   res.status(200)
@@ -305,6 +310,12 @@ router.put('/:spotId(\\d+)', requireAuth, spotValidator, async (req, res) => {
       message: "Spot couldn't be found"
     });
   }
+  if(spot.ownerId !== req.user.id){
+    res.status(403)
+    return res.json({
+      message: 'Spot must belong to the current user'
+    });
+  }
 
   spot.address = address || spot.address
   spot.city = city || spot.city
@@ -315,6 +326,8 @@ router.put('/:spotId(\\d+)', requireAuth, spotValidator, async (req, res) => {
   spot.name = name || spot.name
   spot.description = description || spot.description
   spot.price = price || spot.price
+
+  await spot.save()
 
   res.status(200)
   res.json({
@@ -416,7 +429,7 @@ router.get('/:spotId(\\d+)', async (req, res) => {
 router.get('/current', requireAuth, async (req, res) => {
   const spots = await Spot.findAll({
     where: {
-      id: req.user.id
+      ownerId: req.user.id
     },
     include: [
       {

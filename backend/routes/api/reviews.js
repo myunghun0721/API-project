@@ -20,35 +20,43 @@ const editreviewValidator = [
   handleValidationErrors
 ];
 /* --------------------------------- */
-router.delete('/:reivewId(\\d+)', requireAuth, async (req,res)=>{
+router.delete('/:reivewId(\\d+)', requireAuth, async (req, res) => {
   const review = await Review.findByPk(req.params.reivewId, {
-    where:{
+    where: {
       userId: req.user.id
     }
   })
 
-  if(!review){
+  if (!review) {
     res.status(404)
     return res.json({
       "message": "Review couldn't be found"
     })
   }
+
+  if(review.userId !== req.user.id){
+    res.status(403)
+    return res.json({
+      message: 'Spot must belong to the current user'
+    });
+  }
   await review.destroy();
+
   res.status(200)
   res.json({
     "message": "Successfully deleted"
   })
 })
 /* --------------------------------- */
-router.put('/:reivewId(\\d+)', requireAuth, editreviewValidator, async (req,res)=>{
+router.put('/:reivewId(\\d+)', requireAuth, editreviewValidator, async (req, res) => {
   const { review, stars } = req.body
   const editreview = await Review.findByPk(req.params.reivewId, {
     where: {
-      userId : req.user.id
+      userId: req.user.id
     },
   })
 
-  if(!editreview){
+  if (!editreview) {
     res.status(404)
     return res.json({
       "message": "Review couldn't be found"
@@ -56,7 +64,7 @@ router.put('/:reivewId(\\d+)', requireAuth, editreviewValidator, async (req,res)
   }
   editreview.review = review || editreview.review
   editreview.stars = stars || editreview.stars
-
+  await editreview.save();
   res.status(200)
   res.json({
     ...editreview.dataValues
@@ -118,18 +126,38 @@ router.get('/current', requireAuth, async (req, res) => {
     }
     ],
     where: {
-      id: req.user.id
+      userId: req.user.id
     }
   })
 
   let r;
   for (r of Reviews) {
     r.toJSON()
+    const spot = r.dataValues.Spot.dataValues
+    if (spot.SpotImages.length >= 1) {
+      spot.previewImage = spot.SpotImages[0].url;
+    }
+    else {
+      spot.previewImage = 'No preview image';
+    }
+    const review = r.dataValues
+    if (review.ReviewImages.length >= 1) {
+      review.ReviewImages = review.ReviewImages[0].url;
+    }
+    else {
+      review.ReviewImages = 'No preview review image';
+    }
+
+
+    delete spot.SpotImages
   }
-  // console.log(Reviews)
-  const spot = r.dataValues.Spot.dataValues
-  spot.previewImage = spot.SpotImages[0].url || 'No preview image'
-  delete spot.SpotImages
+  // if (spot.SpotImages.length) {
+  //   spot.dataValues.previewImage = spot.SpotImages[0].url;
+  // }
+  // else {
+  //   spot.previewImage = 'No preview image';
+  // }
+  // // spot.previewImage = spot.SpotImages[0].url || 'No preview image'
 
   res.status(200)
   res.json({
