@@ -14,8 +14,13 @@ const bookingValidator = [
   check('startDate')
     .exists({ checkFalsy: true })
     .isLength({ min: 1 })
-    .custom(async value => {
-      const startDate = new Date(value)
+    .custom(async (value, req)  => {
+      const body = req.req.body
+      if(body.startDate == body.endDate){
+        throw new Error("Start date and endDate cannot be the same")
+      }
+      const startDate = new Date(body.startDate)
+      const endDate = new Date(body.endDate)
       const currentDate = new Date()
       if (currentDate > startDate) throw new Error("startDate cannot be in the past")
     }),
@@ -25,6 +30,9 @@ const bookingValidator = [
     .custom(async (value, req) => {
       // console.log('====>',req.req.body)
       const body = req.req.body
+      if(body.startDate == body.endDate){
+        throw new Error("Start date and endDate cannot be the same")
+      }
       const startDate = new Date(body.startDate)
       const endDate = new Date(body.endDate)
       // console.log('====>', startDate)
@@ -39,7 +47,7 @@ const bookingValidator = [
   handleValidationErrors
 ];
 
-router.put('/:bookingId', requireAuth, async (req, res) => {
+router.put('/:bookingId', requireAuth, bookingValidator, async (req, res) => {
   let { startDate, endDate } = req.body;
   const booking = await Booking.findByPk(req.params.bookingId);
   if (!booking) {
@@ -71,6 +79,12 @@ router.put('/:bookingId', requireAuth, async (req, res) => {
         },
         {
           [Op.and]: [{ startDate: { [Op.lte]: endDate } }, { endDate: { [Op.gte]: endDate } }],
+        },
+        {
+          [Op.and]: [{ startDate: { [Op.lte]: startDate } }, { endDate: { [Op.lte]: endDate } }],
+        },
+        {
+          [Op.and]: [{ startDate: { [Op.lte]: startDate } }, { endDate: { [Op.gte]: endDate } }],
         },
       ],
 

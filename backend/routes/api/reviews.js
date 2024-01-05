@@ -56,7 +56,7 @@ router.put('/:reivewId(\\d+)', requireAuth, editreviewValidator, async (req, res
     },
   })
 
-  if (review.userId !== req.user.id) {
+  if (editreview.userId !== req.user.id) {
     res.status(403)
     res.json({
       message: 'Review must belong to the current user'

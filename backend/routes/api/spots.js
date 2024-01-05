@@ -184,6 +184,12 @@ router.post('/:spotId(\\d+)/bookings', requireAuth, bookingValidator, async (req
         {
           [Op.and]: [{ startDate: { [Op.lte]: endDate } }, { endDate: { [Op.gte]: endDate } }],
         },
+        {
+          [Op.and]: [{ startDate: { [Op.lte]: startDate } }, { endDate: { [Op.lte]: endDate } }],
+        },
+        {
+          [Op.and]: [{ startDate: { [Op.lte]: startDate } }, { endDate: { [Op.gte]: endDate } }],
+        },
       ],
 
     }
@@ -210,7 +216,8 @@ router.post('/:spotId(\\d+)/bookings', requireAuth, bookingValidator, async (req
 
   res.status(200)
   res.json({
-    ...createBooking.dataValues
+    ...createBooking.dataValues,
+    // message: checkBooking
   })
 })
 /* --------------------------------- */
