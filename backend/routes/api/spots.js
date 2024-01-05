@@ -92,6 +92,57 @@ const bookingValidator = [
   handleValidationErrors
 ];
 
+const pageValidator = [
+  check('page')
+    .custom(async value => {
+      if (value < 1) {
+        throw new Error('Page must be greater than or equal to 1');
+      }
+      if (value > 10) {
+        throw new Error('Page must be less than or equal to 10');
+      }
+    }),
+  check('size')
+    .custom(async value => {
+      if (value < 1) {
+        throw new Error('Size must be greater than or equal to 1');
+      }
+      if (value > 20) {
+        throw new Error('Size must be less than or equal to 20');
+      }
+    }),
+  check('maxLat')
+    .isFloat({ max: 90 })
+    .withMessage('Maximum latitude is invalid')
+    .optional(),
+
+  check('minLat')
+    .isFloat({ min: -90 })
+    .withMessage('Minimum latitude is invalid')
+    .optional(),
+
+  check('minLng')
+    .isFloat({ min: -180 })
+    .withMessage('Minimum longitude is invalid')
+    .optional(),
+
+  check('maxLng')
+    .isFloat({ max: 180 })
+    .withMessage('Maximum longitude is invalid')
+    .optional(),
+
+  check('minPrice')
+    .isInt({ min: 0 })
+    .withMessage('Minimum price must be greater than or equal to 0')
+    .optional(),
+
+  check('maxPrice')
+    .isInt({ min: 0 })
+    .withMessage('Maximum price must be greater than or equal to 0')
+    .optional(),
+  handleValidationErrors
+];
+
 /* --------------------------------- */
 router.post('/:spotId(\\d+)/bookings', requireAuth, bookingValidator, async (req, res) => {
   let { startDate, endDate } = req.body
@@ -310,7 +361,7 @@ router.put('/:spotId(\\d+)', requireAuth, spotValidator, async (req, res) => {
       message: "Spot couldn't be found"
     });
   }
-  if(spot.ownerId !== req.user.id){
+  if (spot.ownerId !== req.user.id) {
     res.status(403)
     return res.json({
       message: 'Spot must belong to the current user'
@@ -475,9 +526,60 @@ router.get('/current', requireAuth, async (req, res) => {
 })
 
 /* --------------------------------- */
-router.get('/', async (req, res) => {
+router.get('/', pageValidator, async (req, res) => {
+  let { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } = req.query
+
+  page = parseInt(page);
+  size = parseInt(size);
+  minPrice = parseInt(minPrice);
+  maxPrice = parseInt(maxPrice);
+  minLat = parseInt(minLat);
+  maxLat = parseInt(maxLat);
+  minLng = parseInt(minLng);
+  maxLng = parseInt(maxLng);
+
+  if (Number.isNaN(page)) page = 1;
+  if (Number.isNaN(size)) size = 20;
+
+  const pagination = {}
+
+  pagination.limit = size
+  pagination.offset = size * (page - 1);
+
+  const option = {}
+  if (minPrice && maxPrice) {
+    option.price = { [Op.between]: [minPrice, maxPrice] };
+  }
+  else if(minPrice && !maxPrice){
+    option.price = {[Op.gte]: minPrice}
+  }
+  else if(!minPrice && maxPrice){
+    option.price = {[Op.lte]: maxPrice}
+  }
+
+  if (minLat && maxLat) {
+    option.lat = { [Op.between]: [minLat, maxLat] };
+  }
+  else if(minLat && !maxLat){
+    option.lat = {[Op.gte]: minLat}
+  }
+  else if(!minLat && maxLat){
+    option.lat = {[Op.lte]: maxLat}
+  }
+
+  if (minLng && maxLng) {
+    option.lng = { [Op.between]: [minLng, maxLng] };
+  }
+  else if(minLng && !maxLng){
+    option.lng = {[Op.gte]: minLng}
+  }
+  else if(!minLng && maxLng){
+    option.lng = {[Op.lte]: maxLng}
+  }
 
   let spots = await Spot.findAll({
+    where: option,
+    ...pagination,
     include: [
       {
         model: SpotImage,
@@ -521,7 +623,9 @@ router.get('/', async (req, res) => {
   })
 
   res.json({
-    Spots: spots
+    Spots: spots,
+    page,
+    size
   })
 })
 
