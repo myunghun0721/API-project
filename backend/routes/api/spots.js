@@ -67,9 +67,9 @@ const bookingValidator = [
   check('startDate')
     .exists({ checkFalsy: true })
     .isLength({ min: 1 })
-    .custom(async (value, req)  => {
+    .custom(async (value, req) => {
       const body = req.req.body
-      if(body.startDate == body.endDate){
+      if (body.startDate == body.endDate) {
         throw new Error("Start date and endDate cannot be the same")
       }
       const startDate = new Date(body.startDate)
@@ -83,7 +83,7 @@ const bookingValidator = [
     .custom(async (value, req) => {
       // console.log('====>',req.req.body)
       const body = req.req.body
-      if(body.startDate == body.endDate){
+      if (body.startDate == body.endDate) {
         throw new Error("Start date and endDate cannot be the same")
       }
       const startDate = new Date(body.startDate)
@@ -178,24 +178,20 @@ router.post('/:spotId(\\d+)/bookings', requireAuth, bookingValidator, async (req
     where: {
       spotId: req.params.spotId,
       [Op.or]: [
+        { startDate: { [Op.between]: [startDate, endDate] } },
+        { endDate: { [Op.between]: [startDate, endDate] } },
         {
-          [Op.and]: [{ startDate: { [Op.lte]: startDate } }, { endDate: { [Op.gte]: startDate } }],
-        },
-        {
-          [Op.and]: [{ startDate: { [Op.lte]: endDate } }, { endDate: { [Op.gte]: endDate } }],
-        },
-        {
-          [Op.and]: [{ startDate: { [Op.lte]: startDate } }, { endDate: { [Op.lte]: endDate } }],
-        },
-        {
-          [Op.and]: [{ startDate: { [Op.lte]: startDate } }, { endDate: { [Op.gte]: endDate } }],
-        },
-      ],
+          [Op.and]: [
+            { startDate: { [Op.lte]: startDate } },
+            { endDate: { [Op.gte]: endDate } }
+          ]
+        }
+      ]
 
     }
   })
 
-  if (checkBooking) {
+  if (checkBooking.length > 0) {
     res.status(403)
     return res.json({
       "message": "Sorry, this spot is already booked for the specified dates",
@@ -203,7 +199,7 @@ router.post('/:spotId(\\d+)/bookings', requireAuth, bookingValidator, async (req
         "startDate": "Start date conflicts with an existing booking",
         "endDate": "End date conflicts with an existing booking"
       }
-    })
+    });
   }
 
   const createBooking = await Booking.create({
@@ -430,7 +426,7 @@ router.post('/:spotId/images', requireAuth, async (req, res) => {
     });
   };
 
-  if (spot.ownerId !== req.user.id){
+  if (spot.ownerId !== req.user.id) {
     res.status(403)
     return res.json({
       message: 'Spot must belong to the current user'
@@ -578,6 +574,7 @@ router.get('/', pageValidator, async (req, res) => {
   if (Number.isNaN(page)) page = 1;
   if (Number.isNaN(size)) size = 20;
 
+  // console.log('============>', minLat, maxLat, minLng, maxLng)
   const pagination = {}
 
   pagination.limit = size
@@ -603,6 +600,9 @@ router.get('/', pageValidator, async (req, res) => {
   else if (!minLat && maxLat) {
     option.lat = { [Op.lte]: maxLat }
   }
+  else if (minLat === maxLat) {
+    option.lat = { [Op.eq]:  minLat}
+  }
 
   if (minLng && maxLng) {
     option.lng = { [Op.between]: [minLng, maxLng] };
@@ -613,6 +613,10 @@ router.get('/', pageValidator, async (req, res) => {
   else if (!minLng && maxLng) {
     option.lng = { [Op.lte]: maxLng }
   }
+  else if (minLng === maxLng) {
+    option.lng = { [Op.eq]:  minLng}
+  }
+  // console.log('====>', option)
 
   let spots = await Spot.findAll({
     where: option,
@@ -659,10 +663,19 @@ router.get('/', pageValidator, async (req, res) => {
     delete spot.dataValues.SpotImages;
   })
 
+  for(const spot of spots){
+    spot.toJSON()
+    // console.log(typeof spot.price)
+    spot.price = parseFloat(spot.price)
+    spot.lat = parseFloat(spot.lat)
+    spot.lng = parseFloat(spot.lng)
+    // console.log(typeof spot.price)
+  }
   res.json({
     Spots: spots,
     page,
-    size
+    size,
+    // type: typeof spots[0].lat
   })
 })
 

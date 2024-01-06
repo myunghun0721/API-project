@@ -56,19 +56,19 @@ router.put('/:reivewId(\\d+)', requireAuth, editreviewValidator, async (req, res
     },
   })
 
-  if (editreview.userId !== req.user.id) {
-    res.status(403)
-    res.json({
-      message: 'Review must belong to the current user'
-    })
-  }
-
   if (!editreview) {
     res.status(404)
     return res.json({
       "message": "Review couldn't be found"
     })
   }
+  if (editreview.userId !== req.user.id) {
+    res.status(403)
+    return res.json({
+      message: 'Review must belong to the current user'
+    })
+  }
+
   editreview.review = review || editreview.review
   editreview.stars = stars || editreview.stars
   await editreview.save();
@@ -80,7 +80,8 @@ router.put('/:reivewId(\\d+)', requireAuth, editreviewValidator, async (req, res
 /* --------------------------------- */
 router.post('/:reviewId/images', requireAuth, async (req, res) => {
   const { url } = req.body
-  const review = await Review.findByPk(req.params.reviewId, {
+  console.log('================>', req.params.reviewId)
+  const review = await Review.findByPk(5000, {
     where: {
       userId: req.user.id
     },
@@ -89,6 +90,12 @@ router.post('/:reviewId/images', requireAuth, async (req, res) => {
     }
   })
 
+  if (!review) {
+    res.status(404)
+    return res.json({
+      "message": "Review couldn't be found"
+    })
+  }
   if (review.userId !== req.user.id) {
     res.status(403)
     res.json({
@@ -97,12 +104,6 @@ router.post('/:reviewId/images', requireAuth, async (req, res) => {
   }
 
 
-  if (!review) {
-    res.status(404)
-    return res.json({
-      "message": "Review couldn't be found"
-    })
-  }
 
   if (review.ReviewImages.length >= 10) {
     res.status(403)
