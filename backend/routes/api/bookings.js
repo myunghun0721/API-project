@@ -72,7 +72,7 @@ router.put('/:bookingId', requireAuth, bookingValidator, async (req, res) => {
   const conflictingBookings = await Booking.findAll({
     where: {
       spotId: booking.spotId,
-      id: { [Op.ne]: req.params.bookingId }, // Exclude the current booking
+      id: { [Op.ne]: req.params.bookingId },
       [Op.or]: [
         { startDate: { [Op.between]: [startDate, endDate] } },
         { endDate: { [Op.between]: [startDate, endDate] } },
