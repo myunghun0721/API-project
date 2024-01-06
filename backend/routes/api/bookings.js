@@ -28,15 +28,14 @@ const bookingValidator = [
     .exists({ checkFalsy: true })
     .isLength({ min: 1 })
     .custom(async (value, req) => {
-      // console.log('====>',req.req.body)
+
       const body = req.req.body
       if (body.startDate == body.endDate) {
         throw new Error("Start date and endDate cannot be the same")
       }
       const startDate = new Date(body.startDate)
       const endDate = new Date(body.endDate)
-      // console.log('====>', startDate)
-      // console.log('====>', endDate)
+
       if (startDate >= endDate) {
         throw new Error("endDate cannot be on or before startDate")
       }
@@ -57,8 +56,7 @@ router.put('/:bookingId', requireAuth, bookingValidator, async (req, res) => {
     })
   }
 
-  // console.log(booking.userId)
-  // console.log(req.user.id)
+
   if (booking.userId !== req.user.id) {
     res.status(403)
     return res.json({
@@ -132,8 +130,7 @@ router.put('/:bookingId', requireAuth, bookingValidator, async (req, res) => {
   //   }
   // })
 
-  // // console.log(checkBooking.id)
-  // // console.log(req.params.bookingId)
+
 
   // if (checkBooking.length === 1 && checkBooking[0].id == req.params.bookingId){
   //   booking.startDate = startDate || booking.startDate
@@ -184,8 +181,7 @@ router.delete('/:bookingId', requireAuth, async (req, res) => {
       "message": "Booking couldn't be found"
     })
   }
-  // console.log('booking user id: ', booking.userId)
-  // console.log('user id: ', req.user.id)
+
   if (booking.userId !== req.user.id && booking.dataValues.Spot.dataValues.ownerId !== req.user.id) {
     res.status(403)
     return res.json({
@@ -249,7 +245,7 @@ router.get('/current', requireAuth, async (req, res) => {
     }
     delete spot.SpotImages
   }
-  // console.log(booking)
+
   // const spot = booking.dataValues.Spot.dataValues
   // spot.previewImage = spot.SpotImages[0].url || 'No preview image'
 

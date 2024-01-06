@@ -81,15 +81,14 @@ const bookingValidator = [
     .exists({ checkFalsy: true })
     .isLength({ min: 1 })
     .custom(async (value, req) => {
-      // console.log('====>',req.req.body)
+
       const body = req.req.body
       if (body.startDate == body.endDate) {
         throw new Error("Start date and endDate cannot be the same")
       }
       const startDate = new Date(body.startDate)
       const endDate = new Date(body.endDate)
-      // console.log('====>', startDate)
-      // console.log('====>', endDate)
+
       if (startDate >= endDate) {
         throw new Error("endDate cannot be on or before startDate")
       }
@@ -229,7 +228,7 @@ router.get('/:spotId(\\d+)/bookings', requireAuth, async (req, res) => {
 
   let isOwner;
   if (spot.ownerId === req.user.id) {
-    // console.log('Owner of the spot')
+
     isOwner = await Booking.findAll({
       where: {
         spotId: req.params.spotId
@@ -241,7 +240,7 @@ router.get('/:spotId(\\d+)/bookings', requireAuth, async (req, res) => {
     })
   }
   else {
-    // console.log('NOT owner of the spot')
+
     isOwner = await Booking.findAll({
       where: {
         spotId: req.params.spotId
@@ -272,9 +271,9 @@ router.post('/:spotId(\\d+)/reviews', requireAuth, reviewValidator, async (req, 
     })
   }
 
-  // console.log(spot.Reviews)
+
   for (const user of spot.Reviews) {
-    // console.log(user.userId)
+
     if (user.userId == req.user.id) {
       res.status(500)
       return res.json({
@@ -540,7 +539,7 @@ router.get('/current', requireAuth, async (req, res) => {
   }
 
   spots.forEach(spot => {
-    // console.log('====>', spot.dataValues.SpotImages[0])
+
     if (spot.dataValues.SpotImages[0]) {
       spot.dataValues.previewImage = spot.SpotImages[0].url;
     }
@@ -574,7 +573,7 @@ router.get('/', pageValidator, async (req, res) => {
   if (Number.isNaN(page)) page = 1;
   if (Number.isNaN(size)) size = 20;
 
-  // console.log('============>', minLat, maxLat, minLng, maxLng)
+
   const pagination = {}
 
   pagination.limit = size
@@ -616,7 +615,7 @@ router.get('/', pageValidator, async (req, res) => {
   else if (minLng === maxLng) {
     option.lng = { [Op.eq]:  minLng}
   }
-  // console.log('====>', option)
+
 
   let spots = await Spot.findAll({
     where: option,
@@ -649,10 +648,10 @@ router.get('/', pageValidator, async (req, res) => {
 
 
   spots.forEach(spot => {
-    // console.log('==>', spot.SpotImages[0].dataValues.url)
+
     // spot.dataValues.previewImage = spot.SpotImages[0].dataValues.url || null
     const jsonSpot = spot.toJSON();
-    // console.log(jsonSpot.SpotImages[0])
+
     if (jsonSpot.SpotImages[0]) {
       spot.dataValues.previewImage = jsonSpot.SpotImages[0].url;
     }
@@ -665,11 +664,11 @@ router.get('/', pageValidator, async (req, res) => {
 
   for(const spot of spots){
     spot.toJSON()
-    // console.log(typeof spot.price)
+
     spot.price = parseFloat(spot.price)
     spot.lat = parseFloat(spot.lat)
     spot.lng = parseFloat(spot.lng)
-    // console.log(typeof spot.price)
+
   }
   res.json({
     Spots: spots,

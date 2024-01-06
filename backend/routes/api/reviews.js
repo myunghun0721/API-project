@@ -80,7 +80,7 @@ router.put('/:reivewId(\\d+)', requireAuth, editreviewValidator, async (req, res
 /* --------------------------------- */
 router.post('/:reviewId/images', requireAuth, async (req, res) => {
   const { url } = req.body
-  console.log('================>', req.params.reviewId)
+
   const review = await Review.findByPk(5000, {
     where: {
       userId: req.user.id
@@ -158,18 +158,18 @@ router.get('/current', requireAuth, async (req, res) => {
     }
     const review = r.dataValues
     // review.temp = []
-    // console.log(review.ReviewImages)
+
     for (reviewimg of review.ReviewImages) {
       const result = reviewimg.toJSON()
       // review.temp.push(result)
-      // console.log(review.temp)
+
     }
     if (review.ReviewImages.length <= 0) {
       review.ReviewImages = 'No preview review image';
     }
     // if (review.ReviewImages.length >= 1) {
 
-    //     console.log(review.ReviewImages)
+
 
     //   // review.ReviewImages = review.ReviewImages[0].url;
     // }
