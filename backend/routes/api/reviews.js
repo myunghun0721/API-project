@@ -81,7 +81,7 @@ router.put('/:reivewId(\\d+)', requireAuth, editreviewValidator, async (req, res
 router.post('/:reviewId/images', requireAuth, async (req, res) => {
   const { url } = req.body
 
-  const review = await Review.findByPk(5000, {
+  const review = await Review.findByPk(req.params.reviewId, {
     where: {
       userId: req.user.id
     },

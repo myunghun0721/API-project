@@ -10,49 +10,40 @@ const { handleValidationErrors } = require('../../utils/validation');
 
 const router = express.Router();
 
-const bookingValidator = [
-  check('startDate')
-    .exists({ checkFalsy: true })
-    .isLength({ min: 1 })
-    .custom(async (value, req) => {
-      const body = req.req.body
-      if (body.startDate == body.endDate) {
-        throw new Error("Start date and endDate cannot be the same")
-      }
-      const startDate = new Date(body.startDate)
-      const endDate = new Date(body.endDate)
-      const currentDate = new Date()
-      if (currentDate > startDate) throw new Error("startDate cannot be in the past")
-    }),
-  check('endDate')
-    .exists({ checkFalsy: true })
-    .isLength({ min: 1 })
-    .custom(async (value, req) => {
+// const bookingValidator = [
+//   check('startDate')
+//     .exists({ checkFalsy: true })
+//     .isLength({ min: 1 })
+//     .custom(async (value, req) => {
+//       const body = req.req.body
+//       const startDate = new Date(body.startDate)
+//       const endDate = new Date(body.endDate)
+//       const currentDate = new Date()
+//       if (startDate < currentDate) throw new Error("startDate cannot be in the past")
+//     }),
+//   check('endDate')
+//     .exists({ checkFalsy: true })
+//     .isLength({ min: 1 })
+//     .custom(async (value, req) => {
+//       const body = req.req.body
+//       const startDate = new Date(body.startDate)
+//       const endDate = new Date(body.endDate)
 
-      const body = req.req.body
-      if (body.startDate == body.endDate) {
-        throw new Error("Start date and endDate cannot be the same")
-      }
-      const startDate = new Date(body.startDate)
-      const endDate = new Date(body.endDate)
+//       if (startDate >= endDate) {
+//         throw new Error("endDate cannot be on or before startDate")
+//       }
+//     }),
+//   handleValidationErrors
+// ];
 
-      if (startDate >= endDate) {
-        throw new Error("endDate cannot be on or before startDate")
-      }
-      // const endDate = new Date(value)
-      // const currentDate = new Date()
-      // if (currentDate > inputDate) throw new Error("startDate cannot be in the past")
-    }),
-  handleValidationErrors
-];
-
-router.put('/:bookingId', requireAuth, bookingValidator, async (req, res) => {
+router.put('/:bookingId', requireAuth, async (req, res) => {
   let { startDate, endDate } = req.body;
   const booking = await Booking.findByPk(req.params.bookingId);
+
   if (!booking) {
     res.status(404)
     return res.json({
-      "message": "Spot couldn't be found"
+      "message": "Booking couldn't be found"
     })
   }
 
@@ -64,8 +55,32 @@ router.put('/:bookingId', requireAuth, bookingValidator, async (req, res) => {
     })
   }
 
+
+  if (startDate == endDate) {
+    res.status(403)
+    return res.json({
+      "message": "Start date and endDate cannot be the same"
+    })
+  }
   startDate = new Date(startDate);
   endDate = new Date(endDate);
+
+  if (endDate < new Date()) {
+    res.status(403)
+    return res.json({
+      "message": "Past bookings can't be modified"
+    })
+  }
+  if (endDate < startDate || startDate < new Date()) {
+    res.status(403)
+    return res.json({
+      "message": "Bad Request",
+      "errors": {
+        "startDate": "startDate cannot be in the past",
+        "endDate": "endDate cannot be on or before startDate"
+      }
+    });
+  }
 
   const conflictingBookings = await Booking.findAll({
     where: {

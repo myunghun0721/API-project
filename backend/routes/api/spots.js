@@ -173,7 +173,7 @@ router.post('/:spotId(\\d+)/bookings', requireAuth, bookingValidator, async (req
   startDate = new Date(startDate)
   endDate = new Date(endDate)
 
-  const checkBooking = await Booking.findOne({
+  const checkBooking = await Booking.findAll({
     where: {
       spotId: req.params.spotId,
       [Op.or]: [
@@ -493,12 +493,15 @@ router.get('/:spotId(\\d+)', async (req, res) => {
     }
   });
 
+  let totalRating = 0;
   let total = 0;
   for (const review of reviews) {
+    totalRating += review.stars;
     total++;
   }
 
   spots.dataValues.numReviews = total
+  spots.dataValues.avgStarRating = totalRating
   spots.dataValues.Owner = spots.dataValues.User
   delete spots.dataValues.User
   delete spots.dataValues.Owner.dataValues.username
@@ -589,6 +592,19 @@ router.get('/', pageValidator, async (req, res) => {
   else if (!minPrice && maxPrice) {
     option.price = { [Op.lte]: maxPrice }
   }
+  else if (minPrice === maxPrice) {
+    option.price = { [Op.eq]:  minPrice}
+  }
+
+  if(maxPrice < minPrice){
+    res.status(400)
+    return res.json({
+      "message": "Bad request.",
+      "errors": {
+          "maxPrice": "maxPrice must be greater than minPrice"
+      }
+    })
+  }
 
   if (minLat && maxLat) {
     option.lat = { [Op.between]: [minLat, maxLat] };
@@ -601,6 +617,16 @@ router.get('/', pageValidator, async (req, res) => {
   }
   else if (minLat === maxLat) {
     option.lat = { [Op.eq]:  minLat}
+  }
+
+  if(maxLat < minLat){
+    res.status(400)
+    return res.json({
+      "message": "Bad request.",
+      "errors": {
+          "maxLat": "maxLat must be greater than minLat"
+      }
+    })
   }
 
   if (minLng && maxLng) {
@@ -616,6 +642,15 @@ router.get('/', pageValidator, async (req, res) => {
     option.lng = { [Op.eq]:  minLng}
   }
 
+  if(maxLng < minLng){
+    res.status(400)
+    return res.json({
+      "message": "Bad request.",
+      "errors": {
+          "maxLng": "maxLng must be greater than minLng"
+      }
+    })
+  }
 
   let spots = await Spot.findAll({
     where: option,
