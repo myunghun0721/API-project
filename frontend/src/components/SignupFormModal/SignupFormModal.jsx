@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useModal } from '../../context/Modal';
 import * as sessionActions from '../../store/session';
@@ -13,13 +13,14 @@ function SignupFormModal() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
+  const [isfilled, setIsfilled] = useState(false)
   const { closeModal } = useModal();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (password === confirmPassword) {
-      setErrors({});
-      return dispatch(
+    setErrors({});
+    try{
+      const res = await dispatch(
         sessionActions.signup({
           email,
           username,
@@ -28,18 +29,52 @@ function SignupFormModal() {
           password
         })
       )
-        .then(closeModal)
-        .catch(async (res) => {
-          const data = await res.json();
-          if (data?.errors) {
-            setErrors(data.errors);
-          }
-        });
+      if(res.ok){
+        closeModal()
+      }
     }
-    return setErrors({
-      confirmPassword: "Confirm Password field must be the same as the Password field"
-    });
+    catch(error){
+      const data = await error.json()
+      if(data?.errors){
+        setErrors(data.errors)
+      }
+    }
   };
+
+  //check form
+  useEffect(() => {
+    const errorObj = {}
+    if (email.length && username.length && firstName.length && lastName.length && password.length && confirmPassword.length) {
+      setIsfilled(true)
+    }
+    else {
+      setIsfilled(false)
+    }
+
+    if (username.length < 4) {
+      setIsfilled(false)
+      errorObj.username = "Username must greater than 4 characters"
+
+    }
+    if (password.length < 6) {
+      setIsfilled(false)
+      errorObj.password = "Password must greater than 6 characters"
+    }
+
+    if (password !== confirmPassword) {
+      setIsfilled(false)
+      errorObj.confirmPassword = "Confirm Password field must be the same as the Password field"
+    }
+
+    const regex = /^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,15}$/;
+    const result = regex.test(email);
+    if (!result) {
+      setIsfilled(false)
+      errorObj.email = "Please provide a valid email."
+    }
+
+    setErrors(errorObj)
+  }, [email, username, firstName, lastName, password, confirmPassword])
 
   return (
     <div className='div-modal-signup'>
@@ -105,7 +140,7 @@ function SignupFormModal() {
           />
         </label>
         {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
-        <button type="submit">Sign Up</button>
+        <button disabled={!isfilled} type="submit">Sign Up</button>
       </form>
     </div>
   );

@@ -1,0 +1,19 @@
+.div-spots-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, auto));
+    gap: 10px;
+    width: 100%;
+
+}
+.div-spots {
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    text-align: center;
+    width: 100%;
+    max-width: 350px;
+    min-width: 300px;
+}
+a {
+    all: unset;
+    cursor: pointer;
+}

@@ -14,15 +14,17 @@ function LoginFormModal() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
-    const res = await dispatch(sessionActions.login({ credential, password }))
-    if(res.ok){
-      closeModal()
-      sessionStorage.setItem("id", credential);
-      sessionStorage.setItem("pass", password);
+    try{
+      const res = await dispatch(sessionActions.login({ credential, password }))
+      if(res.ok){
+        closeModal()
+        sessionStorage.setItem("id", credential);
+        sessionStorage.setItem("pass", password);
 
-      return res
+        return res
+      }
     }
-    else{
+    catch(e){
       const errorObj ={}
       errorObj.credential = "The provided credentails were invalid"
       setErrors(errorObj)
