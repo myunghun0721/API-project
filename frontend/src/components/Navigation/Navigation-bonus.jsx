@@ -7,16 +7,18 @@ function Navigation({ isLoaded }) {
   const sessionUser = useSelector(state => state.session.user);
 
   return (
-    <ul>
-      <li>
-        <NavLink to="/">Home</NavLink>
-      </li>
+    <div className='div-navigation-wrapper'>
+      <div className='div-navigation-a'>
+        <NavLink to="/">
+          <img className='homeImg'src='https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Animal_Crossing_Leaf.svg/504px-Animal_Crossing_Leaf.svg.png' alt='Home img'></img>
+        </NavLink>
+      </div>
       {isLoaded && (
-        <li>
+        <div className='div-navigation-a-user'>
           <ProfileButton user={sessionUser} />
-        </li>
+        </div>
       )}
-    </ul>
+    </div>
   );
 }
 

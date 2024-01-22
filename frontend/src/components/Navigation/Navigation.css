@@ -1,7 +1,76 @@
-.profile-dropdown {
-  position: absolute;
+#root {
+  margin: 15px;
 }
 
+.homeImg {
+  width: 50px;
+  height: 50px;
+}
+
+.profile-dropdown {
+  position: absolute;
+  right: 22px;
+  border: 1px solid;
+  width: 150px;
+  padding: 10px;
+  top: 70px;
+  background-color: #ECE4CF;
+  border: none;
+  border-radius: 15px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.div-login,
+.div-sign-up {
+  text-align: center;
+  color: #938776;
+}
+.div-login:hover,
+.div-sign-up:hover {
+ color: #3b362f;
+}
+.profile-dropdown,
+.profile-dropdown p {
+  background-color: #ECE4CF;
+}
+.profile-dropdown p {
+  margin: 0;
+}
 .hidden {
   display: none;
+}
+
+.div-navigation-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.div-sign-up {
+  cursor: pointer;
+}
+
+.div-login {
+  cursor: pointer;
+}
+
+.button-user-circle {
+  width: 65px;
+  height: 45px;
+  background-color: #ECE4CF;
+  border-radius: 15px;
+  width: 65px;
+  height: 45px;
+  border: none;
+}
+
+.button-user-circle:hover,
+.button-user-circle:hover i {
+  background-color: #ccc5b2;
+}
+
+.fas {
+  font-size: 30px;
+  background-color: #ECE4CF;
 }
