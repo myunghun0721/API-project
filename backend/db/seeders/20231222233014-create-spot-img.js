@@ -13,17 +13,32 @@ module.exports = {
     await SpotImage.bulkCreate([
       {
         spotId: 1,
-        url: "www.spotImage_test_url1.com",
+        url: "https://soopool.art/image/acnh/out/360px-House_of_Kid%20Cat_NH_Model.png",
+        preview: true
+      },
+      {
+        spotId: 1,
+        url: "https://soopool.art/image/acnh/ani/Kid%20Cat.jpg",
         preview: true
       },
       {
         spotId: 2,
-        url: "www.spotImage_test_url2.com",
+        url: "https://soopool.art/image/acnh/out/360px-House_of_Kabuki_NH_Model.png",
+        preview: false
+      },
+      {
+        spotId: 2,
+        url: "https://soopool.art/image/acnh/ani/Kabuki.jpg",
         preview: false
       },
       {
         spotId: 3,
-        url: "www.spotImage_test_url3.com",
+        url: "https://soopool.art/image/acnh/out/360px-House_of_Puddles_NH_Model.png",
+        preview: true
+      },
+      {
+        spotId: 3,
+        url: "https://soopool.art/image/acnh/ani/Puddles.jpg",
         preview: true
       },
 

@@ -113,12 +113,6 @@ module.exports = {
         review: 'test review',
         stars: 4
       },
-      {
-        spotId: 15,
-        userId: 2,
-        review: 'test review',
-        stars: 5
-      },
 
     ], { validate: true });
   },

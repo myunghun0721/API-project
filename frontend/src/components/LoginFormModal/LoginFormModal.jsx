@@ -45,11 +45,11 @@ function LoginFormModal() {
   }, [credential, password])
 
 
-  const user = sessionStorage.getItem("id");
-  function loginBack(){
-    const pass = sessionStorage.getItem("pass");
-    const credential = user;
-    const password = pass;
+
+  function loginDemo(){
+    console.log('login as demo')
+    const credential = "tester1";
+    const password = "password";
     closeModal()
     dispatch(sessionActions.login({ credential, password }))
   }
@@ -79,7 +79,7 @@ function LoginFormModal() {
         {errors.password && <label>{errors.password}</label>}
         <button disabled={Object.values(errors).length > 0} type="submit">Log In</button>
       </form>
-        {user && <button onClick={loginBack}>Login as {user}</button>}
+        <button onClick={loginDemo}>Login as Demo-user</button>
     </div>
   );
 }
