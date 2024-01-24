@@ -16,6 +16,7 @@ button[disabled]{
   background-color: #cccccc;
   color: #666666;
 }
-p i {
+.fa-solid, .fa-star{
   color: #f8d71c;
+
 }

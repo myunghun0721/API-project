@@ -49,6 +49,7 @@
     border-radius: 7px;
     border: none;
 }
+
 .div-spotDetail button:hover {
     background-color: #3b362f;
     color: #ccc5b2;
@@ -66,8 +67,9 @@
     border-radius: 5px;
     margin-top: 5px;
     margin-bottom: 5px;
-  }
-.div-spotDetail-img-container > div{
+}
+
+.div-spotDetail-img-container>div {
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 8px;
@@ -77,35 +79,42 @@
     background-color: #EBEEF1;
     align-items: center;
     display: flex;
-  }
-  .div-spotDetail-img-container img {
+}
+
+.div-spotDetail-img-container img {
     width: 100%;
 }
-.div-spotDetail-img-container div:nth-child(2){
+
+.div-spotDetail-img-container div:nth-child(2) {
     grid-column-start: 1;
-	grid-column-end: 2;
+    grid-column-end: 2;
     grid-row-start: 1;
     grid-row-end: 3;
 }
 
-.div-reserve-button{
+.div-reserve-button {
     border-radius: 7px;
     border: 1px solid #ccc5b2;
     width: 300px;
-    padding: 15px;
+    padding: 10px;
     background-color: #ECE4CF;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-.div-reserve-button p{
+
+.div-reserve-button h3 {
+    margin: 5px;
+}
+.div-reserve-button p {
     margin: 5px;
 }
 
-.div-reserve-button button{
+.div-reserve-button button {
     height: 50px;
 }
-.spot-header{
+
+.spot-header {
     display: flex;
     justify-content: center;
     background-color: #EBEEF1;
@@ -113,4 +122,48 @@
     border: 1px solid #ddd;
     margin: 0;
     padding: 5px;
+}
+
+.div-spot-review {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #EBEEF1;
+    font-size: 16px !important;
+}
+
+.div-spot-review h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.div-spot-review p {
+    margin-bottom: 8px;
+    color: #666;
+}
+
+.div-review-star-review-count{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+    font-size: 15px;
+}
+
+.div-center-dot{
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse;
+    height: 40px;
+    gap: 5px;
+
+}
+
+#centerDot{
+    font-size: 50px;
+    color: #333;
+    margin: 0;
 }

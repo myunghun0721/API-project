@@ -19,7 +19,7 @@ function Home() {
             <hr />
             <div className='div-spots-container'>
                 {spotArr.map(spot => (
-                    <NavLink to={`/spotDetail/${spot.id}`} className='div-spots' key={spot.id}>
+                    <NavLink to={`/spots/${spot.id}`} className='div-spots' key={spot.id}>
                         {/* {console.log(spot)} */}
                         {spot.previewImage !== 'No preview image' ? <img src={`${spot.previewImage}`} alt='animal crossing villager img' /> : <img src='https://placehold.co/315x325' alt='placeholder img' />}
                         <div className='div-spots-description-holder'>

@@ -3,10 +3,13 @@ import './Spot.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 import { fetchSpotDetail } from '../../store/spots'
+import { fetchReviews } from '../../store/reviews'
 
 function SpotDetail() {
     const { spotId } = useParams()
+    const reviews = useSelector(state => state.reviews)
     const spots = useSelector(state => state.spots)
+    const reviewArr = Object.values(reviews)
     const spotDetail = spots[spotId];
     const [rating, setRating] = useState(0)
     let imgArr;
@@ -22,8 +25,18 @@ function SpotDetail() {
     useEffect(() => {
         setRating(avgRating)
         dispatch(fetchSpotDetail(spotId))
+        dispatch(fetchReviews(spotId))
     }, [dispatch, avgRating])
 
+    let myArr = []
+    reviewArr.forEach(spotreview => {
+        if (Number(spotreview.spotId) === Number(spotId)) {
+            myArr.push(spotreview)
+        }
+    })
+    myArr.sort(function(a, b){
+        return b.createdAt - a.createdAt
+    })
 
     if (spotDetail) {
         return (
@@ -50,14 +63,32 @@ function SpotDetail() {
                     </div>
                     <div className='div-reserve-button'>
                         {spotDetail && <h3>${spotDetail.price} per night</h3>}
-                        {rating ? <p><i className="fa-solid fa-star"></i>: {rating.toFixed(2)}</p> : <p><i className="fa-solid fa-star"></i>: NEW!</p>}
-                        <button onClick={()=>alert("Feature coming soon")}>Reserve</button>
+                        <div className='div-center-dot'>
+                            {rating ? <h2><i className="fa-solid fa-star"></i>: {rating}</h2> : <h2><i className="fa-solid fa-star"></i>: NEW!</h2>}
+                            {myArr.length !== 0 ? <p id='centerDot'>&#183;</p> : null}
+                            {myArr.length === 1 ? <h2>{Number(spotDetail.numReviews)} Review</h2> : myArr.length > 1 ? <h2>{Number(spotDetail.numReviews)} reviews</h2> : null}
+                        </div>
+                        <button onClick={() => alert("Feature coming soon")}>Reserve</button>
                     </div>
                 </div>
                 <hr />
-                {/* <div className='div-review-spotDetail'>
-                    {rating ? <p><i className="fa-solid fa-star"></i>: {rating}</p> : <p><i className="fa-solid fa-star"></i>: NEW!</p>}
-                </div> */}
+                <div className='div-review-spotDetail'>
+                    <div className='div-review-star-review-count'>
+
+                        {rating ? <h2><i className="fa-solid fa-star"></i>: {rating}</h2> : <h2><i className="fa-solid fa-star"></i>: NEW!</h2>}
+                        {myArr.length !== 0 ? <p id='centerDot'>&#183;</p> : null}
+                        {myArr.length === 1 ? <h2>{Number(spotDetail.numReviews)} Review</h2> : myArr.length > 1 ? <h2>{Number(spotDetail.numReviews)} reviews</h2> : null}
+                    </div>
+                    {reviewArr && reviewArr.map(review => {
+                        if (Number(review.spotId) === Number(spotId)) {
+                            return <div key={review.id} className='div-spot-review'>
+                                <h3>{review.User.firstName} {review.User.lastName}</h3>
+                                <p>{review.createdAt.split('T')[0]}</p>
+                                <p>{review.review}</p>
+                            </div>
+                        }
+                    })}
+                </div>
             </div>
         )
     }
