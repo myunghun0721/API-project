@@ -28,7 +28,7 @@ function SpotDetail() {
     if (spotDetail) {
         return (
             <div>
-                <h2 className='spot-header'>{spotDetail && spotDetail.name}</h2>
+                <h2 className='spot-header'>Details of spot: {spotDetail && spotDetail.name}</h2>
                 <div className='div-spotDetail-img-container'>
                     {imgArr && imgArr.map((img) => (
                         <div key={img.id} className={`div-spotDetail-img${img.id}`}>
@@ -50,7 +50,7 @@ function SpotDetail() {
                     </div>
                     <div className='div-reserve-button'>
                         {spotDetail && <h3>${spotDetail.price} per night</h3>}
-                        {rating ? <p><i className="fa-solid fa-star"></i>: {rating}</p> : <p><i className="fa-solid fa-star"></i>: NEW!</p>}
+                        {rating ? <p><i className="fa-solid fa-star"></i>: {rating.toFixed(2)}</p> : <p><i className="fa-solid fa-star"></i>: NEW!</p>}
                         <button onClick={()=>alert("Feature coming soon")}>Reserve</button>
                     </div>
                 </div>

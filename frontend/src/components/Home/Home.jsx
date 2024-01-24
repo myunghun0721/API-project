@@ -22,13 +22,19 @@ function Home() {
                     <NavLink to={`/spotDetail/${spot.id}`} className='div-spots' key={spot.id}>
                         {/* {console.log(spot)} */}
                         {spot.previewImage !== 'No preview image' ? <img src={`${spot.previewImage}`} alt='animal crossing villager img' /> : <img src='https://placehold.co/315x325' alt='placeholder img' />}
-                        <div>
-                            <h3>{spot.name}</h3>
-                            <p>{spot.description}</p>
-                            <p>{spot.city}, {spot.state}</p>
+                        <div className='div-spots-description-holder'>
+                            <div className='div-spots-tooltiptext'>
+                                <h3>{spot.name}</h3>
+                                <p>{spot.description}</p>
+                            </div>
+                            <div className='div-spots-city-state-rating'>
+                                <p>{spot.city}, {spot.state}</p>
+
+                                {spot.avgRating ? <p><i className="fa-solid fa-star"></i>: {spot.avgRating.toFixed(2)}</p> : <p><i className="fa-solid fa-star"></i>: NEW!</p>}
+
+                            </div>
                             <label>${spot.price} per night</label>
 
-                            {spot.avgRating ? <p><i className="fa-solid fa-star"></i>: {spot.avgRating}</p> : <p><i className="fa-solid fa-star"></i>: NEW!</p>}
                         </div>
                     </NavLink>
                 ))}
