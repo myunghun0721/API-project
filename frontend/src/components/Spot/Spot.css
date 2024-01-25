@@ -167,3 +167,22 @@
     color: #333;
     margin: 0;
 }
+
+#postReviewButton{
+    background-color: #C1D7EC;
+    color: #3b362f;
+    margin-top: 15px;
+    width: 200px;
+    height: 40px;
+    cursor: pointer;
+    border-radius: 7px;
+    border: none;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+#postReviewButton:hover{
+    background-color: #3b362f;
+    color: #ccc5b2;
+    cursor: pointer;
+
+}

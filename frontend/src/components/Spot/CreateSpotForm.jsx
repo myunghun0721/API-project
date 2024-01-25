@@ -1,12 +1,17 @@
 import { useEffect, useState } from "react";
+import { useDispatch } from 'react-redux';
 import './CreateSpot.css'
+import { createSpot, postSpotImg } from "../../store/spots";
+import { useNavigate } from "react-router-dom";
 function CreateSpotForm() {
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
     const [address, setAddress] = useState("")
     const [city, setCity] = useState("")
     const [state, setState] = useState("")
     const [country, setCountry] = useState("")
-    // const [lat, setLat] = useState("")
-    // const [lng, setLng] = useState("")
+    const [lat, setLat] = useState("")
+    const [lng, setLng] = useState("")
     const [name, setName] = useState("")
     const [description, setDescription] = useState("")
     const [price, setPrice] = useState("")
@@ -17,7 +22,7 @@ function CreateSpotForm() {
     const [imgurl5, setImgurl5] = useState("")
     const [error, setError] = useState({})
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setError({})
         const formSubmit = {
@@ -27,12 +32,54 @@ function CreateSpotForm() {
             country,
             name,
             description,
+            lat,
+            lng,
             price,
-            imgurl1,
-            imgurl2: (imgurl2? imgurl2 : null),
-            imgurl3: (imgurl3? imgurl3 : null),
-            imgurl4: (imgurl4? imgurl4 : null),
-            imgurl5: (imgurl5? imgurl5 : null)
+        }
+
+
+        // to do dispatch formsubmit
+        const returnSpotId = await dispatch(createSpot(formSubmit))
+
+        if(imgurl1){
+            const image = {
+                id: returnSpotId,
+                url: imgurl1,
+                preview: true
+            }
+            dispatch(postSpotImg(image))
+        }
+        if(imgurl2){
+            const image = {
+                id: returnSpotId,
+                url: imgurl2,
+                preview: true
+            }
+            dispatch(postSpotImg(image))
+        }
+        if(imgurl3){
+            const image = {
+                id: returnSpotId,
+                url: imgurl3,
+                preview: true
+            }
+            dispatch(postSpotImg(image))
+        }
+        if(imgurl4){
+            const image = {
+                id: returnSpotId,
+                url: imgurl4,
+                preview: true
+            }
+            dispatch(postSpotImg(image))
+        }
+        if(imgurl5){
+            const image = {
+                id: returnSpotId,
+                url: imgurl5,
+                preview: true
+            }
+            dispatch(postSpotImg(image))
         }
 
         setAddress("")
@@ -41,15 +88,18 @@ function CreateSpotForm() {
         setCountry("")
         setName("")
         setDescription("")
+        setLat("")
+        setLng("")
         setPrice("")
         setImgurl1("")
         setImgurl2("")
         setImgurl3("")
         setImgurl4("")
         setImgurl5("")
-        // to do dispatch formsubmit
-        console.log(formSubmit)
+
+        navigate(`/spots/${returnSpotId}`)
     };
+
 
     useEffect(()=>{
         const errorObj = {}
@@ -113,9 +163,21 @@ function CreateSpotForm() {
         if(imgurl5.length !== 0 && !imgurl5.match(/\.(jpeg|jpg|png)$/)){
             errorObj.imgurl5 = "Image URL must end in .png, .jpg, or .jpeg"
         }
+        if(lat.length ===0){
+            errorObj.lat = "Latitude is required"
+        }
+        if(Number(lat) > 90 || Number(lat) < -90){
+            errorObj.lat = "Latitude must be within -90 and 90"
+        }
+        if(lng.length === 0){
+            errorObj.lng = "Longitude is required"
+        }
+        if(Number(lng) > 180 || Number(lng) < -180){
+            errorObj.lng = "Longitude must be within -180 and 180"
+        }
 
         setError(errorObj)
-    }, [address, city, state, country, name, description, price, imgurl1, imgurl2, imgurl3, imgurl4, imgurl5])
+    }, [address, city, state, country, name, description, price, lat, lng, imgurl1, imgurl2, imgurl3, imgurl4, imgurl5])
 
     return (
         <div className="div-createSpot-form">
@@ -147,19 +209,20 @@ function CreateSpotForm() {
                     <input type="text" name="state" placeholder={"State"} value={state} onChange={(e)=>setState(e.target.value)}/>
                 </label>
                 {error.state && <h5>{error.state}</h5>}
-                {/* <label>
+                <label>
                     Latitude:
-                    <input type="text" name="lat" placeholder={"Optional but if want to include, input should -90 and 90"} onChange={(e)=>setLat(e.target.value)}/>
+                    <input type="text" name="lat" placeholder={"Latitude must be within -90 and 90"} onChange={(e)=>setLat(e.target.value)}/>
                 </label>
+                {error.lat && <h5>{error.lat}</h5>}
                 <label>
                     Longitude:
-                    <input type="text" name="lng" placeholder={"Optional but if want to include, input should  -180 and 180"} onChange={(e)=>setLng(e.target.value)}/>
-                </label> */}
-
+                    <input type="text" name="lng" placeholder={"Longitude must be within -180 and 180"} onChange={(e)=>setLng(e.target.value)}/>
+                </label>
+                {error.lng && <h5>{error.lng}</h5>}
                 <hr />
 
                 <h3>Describe your place to guests</h3>
-                <p>Mention the best features of your space, any special amentities like fast wifi or parking, and what you love about the meighborhood.</p>
+                <p>Mention the best features of your space, any special amentities like fast wifi or parking, and what you love about the neighborhood.</p>
                 <label>
                     <textarea type="textarea" name="description" value={description} placeholder={"Please write at least 30 characters"} rows="5" cols="70" onChange={(e)=> setDescription(e.target.value)}/>
                 </label>
@@ -209,6 +272,7 @@ function CreateSpotForm() {
                 <hr />
 
                 <button type="submit" disabled={Object.values(error).length > 0}>Create Spot</button>
+                {/* <button type="submit" >test</button> */}
             </form>
         </div>
     );

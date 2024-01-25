@@ -8,13 +8,13 @@ export const fetchReviews = (spotId) => async (dispatch) => {
 }
 
 const RECIEVE_REVIEWS = 'reviews/RECIEVE_REVIEWS'
-export const receiveReviews = (reviews) =>({
+export const receiveReviews = (reviews) => ({
     type: RECIEVE_REVIEWS,
     reviews
 })
 
-const reviewsReducer = (state = {}, action) =>{
-    switch(action.type){
+const reviewsReducer = (state = {}, action) => {
+    switch (action.type) {
         case RECIEVE_REVIEWS: {
             const newState = { ...state }
             for (let review of action.reviews) {
@@ -24,7 +24,7 @@ const reviewsReducer = (state = {}, action) =>{
         }
 
         default:
-        return state
+            return state
     }
 }
 export default reviewsReducer;
