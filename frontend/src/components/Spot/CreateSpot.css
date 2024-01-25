@@ -1,0 +1,58 @@
+.div-createSpot-form {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #C1D7EC;
+}
+
+.form-createSpot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 99%;
+}
+.form-createSpot label{
+    margin: 0;
+    padding: 0;
+    width: 95%;
+}
+
+.div-createSpot-head {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+
+label {
+    display: block;
+    margin-bottom: 8px;
+}
+
+
+input[type="text"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.form-createSpot button {
+    border-radius: 7px;
+    border: 1px solid #ccc5b2;
+    width: 300px;
+    padding: 10px;
+    background-color: #ECE4CF;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form-createSpot button:hover {
+    background-color: #3b362f;
+    color: #ccc5b2;
+    cursor: pointer;
+}

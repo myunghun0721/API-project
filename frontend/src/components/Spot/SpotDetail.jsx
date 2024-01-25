@@ -6,11 +6,14 @@ import { fetchSpotDetail } from '../../store/spots'
 import { fetchReviews } from '../../store/reviews'
 
 function SpotDetail() {
+    const sessionUser = useSelector(state => state.session.user);
+    console.log("🚀 ~ SpotDetail ~ sessionUser:", sessionUser)
     const { spotId } = useParams()
     const reviews = useSelector(state => state.reviews)
     const spots = useSelector(state => state.spots)
     const reviewArr = Object.values(reviews)
     const spotDetail = spots[spotId];
+    console.log("🚀 ~ SpotDetail ~ spotDetail:", spotDetail)
     const [rating, setRating] = useState(0)
     let imgArr;
     let owner;
@@ -88,6 +91,7 @@ function SpotDetail() {
                             </div>
                         }
                     })}
+                    {owner && myArr.length === 0 && sessionUser.id !== owner.id && <p>Be the first to post a review!</p>}
                 </div>
             </div>
         )
