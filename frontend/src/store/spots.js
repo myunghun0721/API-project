@@ -1,4 +1,13 @@
 import { csrfFetch } from './csrf.js';
+import { fetchSpotByOwner } from './spotByOwner.js';
+
+export const deleteSpot = (spotId) => async (dispatch) => {
+    await csrfFetch(`/api/spots/${spotId}`, {
+        method: "DELETE",
+    });
+
+    dispatch(receiveDeleteSpot(spotId));
+};
 
 export const fetchSpotDetail = (spotId) => async (dispatch) => {
     const req = await csrfFetch(`/api/spots/${spotId}`)
@@ -24,7 +33,7 @@ export const createSpot = ({ address, city, state, country, name, lat, lng, desc
     return newId
 
 }
-export const postSpotImg = ({id, url, preview}) => async () => {
+export const postSpotImg = ({ id, url, preview }) => async () => {
     const res = await csrfFetch(`/api/spots/${id}/images`, {
         method: "POST",
         body: JSON.stringify({
@@ -36,6 +45,33 @@ export const postSpotImg = ({id, url, preview}) => async () => {
     return res
 
 }
+export const updateSpot = ({ spotId, country, address, city, state, lat, lng, description, name, price }) => async (dispatch) => {
+    // console.log('from updat spot', spotId)
+    const res = await csrfFetch(`/api/spots/${spotId}`, {
+        method: "PUT",
+        body: JSON.stringify({
+            country,
+            address,
+            city,
+            state,
+            lat,
+            lng,
+            description,
+            name,
+            price,
+        }),
+    });
+
+    const data = await res.json();
+    dispatch(receiveUpdatdSpot(data))
+    return data;
+}
+
+const DELETE_POST = 'spot/DELETE_POST'
+export const receiveDeleteSpot = (spotId) => ({
+    type: DELETE_POST,
+    spotId
+})
 
 const POST_SPOT = 'spot/POST_SPOT'
 export const postSpot = (spot) => ({
@@ -53,14 +89,18 @@ export const receiveSpotDetail = (spotDetail) => ({
     spotDetail
 })
 
-const spotsReducer = (state = {}, action) => {
+const UPDATE_SPOT = 'spots/UPDATE_SPOT'
+export const receiveUpdatdSpot = (spot) => ({
+    type: UPDATE_SPOT,
+    spot
+})
+
+
+const initialState = { updatedSpot: [], spot: [] };
+const spotsReducer = (state = initialState, action) => {
     switch (action.type) {
         case RECEIVE_SPOTS: {
-            const newState = { ...state }
-            for (let spot of action.spots) {
-                newState[spot.id] = spot
-            }
-            return newState
+            return { ...state, spot: action.spots };
         }
         case RECEIVE_SPOTDETAIL: {
             // console.log(action.spotDetail.id)
@@ -69,6 +109,14 @@ const spotsReducer = (state = {}, action) => {
         }
         case POST_SPOT: {
             return { ...state, newspot: action.spot };
+        }
+        case UPDATE_SPOT: {
+            return { ...state, updateSpot: action.spot }
+        }
+        case DELETE_POST: {
+            const newState = { ...state };
+            delete newState[action.spotId]
+            return newState;
         }
         default:
             return state;

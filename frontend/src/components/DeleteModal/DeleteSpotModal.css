@@ -1,0 +1,14 @@
+#deleteModal h1{
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+#yes{
+    margin: 5px;
+    height: 40px;
+    background-color: red;
+}
+#no{
+    margin: 5px;
+    height: 40px;
+    background-color: gray;
+}

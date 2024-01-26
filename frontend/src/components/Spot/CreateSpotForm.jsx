@@ -211,12 +211,12 @@ function CreateSpotForm() {
                 {error.state && <h5>{error.state}</h5>}
                 <label>
                     Latitude:
-                    <input type="text" name="lat" placeholder={"Latitude must be within -90 and 90"} onChange={(e)=>setLat(e.target.value)}/>
+                    <input type="number" name="lat" placeholder={"Latitude must be within -90 and 90"} onChange={(e)=>setLat(e.target.value)}/>
                 </label>
                 {error.lat && <h5>{error.lat}</h5>}
                 <label>
                     Longitude:
-                    <input type="text" name="lng" placeholder={"Longitude must be within -180 and 180"} onChange={(e)=>setLng(e.target.value)}/>
+                    <input type="number" name="lng" placeholder={"Longitude must be within -180 and 180"} onChange={(e)=>setLng(e.target.value)}/>
                 </label>
                 {error.lng && <h5>{error.lng}</h5>}
                 <hr />
@@ -239,7 +239,7 @@ function CreateSpotForm() {
                 <h3>Set a base price for your spot</h3>
                 <p>Competitive pricing can help your listing stand out and rank higher in search results.</p>
                 <label>
-                    <input type="text" name="price" value={price} placeholder={"$ Price per night (USD)"} onChange={(e)=>setPrice(e.target.value)}/>
+                    <input type="number" name="price" value={price} placeholder={"$ Price per night (USD)"} onChange={(e)=>setPrice(e.target.value)}/>
                 </label>
                 {error.price && <h5>{error.price}</h5>}
                 <hr />

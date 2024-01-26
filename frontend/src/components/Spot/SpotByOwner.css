@@ -1,4 +1,4 @@
-#manageCreateButton{
+#manageCreateButton {
     border-radius: 7px;
     border: 1px solid #ccc5b2;
     padding: 0;
@@ -8,15 +8,47 @@
     align-items: center;
     margin-bottom: 15px
 }
+
 #manageCreateButton a {
     display: inline-block;
     padding: 15px;
     width: fit-content;
     border-radius: 7px;
 }
+
 #manageCreateButton:hover,
-#manageCreateButton:hover a{
+#manageCreateButton:hover a {
     background-color: #3b362f;
     color: #ccc5b2;
     cursor: pointer;
+}
+
+.div-button-holder {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.div-button-holder button {
+    display: flex;
+    width: 80px;
+    height: 40px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 7px;
+    border: 1px solid #ccc5b2;
+    background-color: #ECE4CF;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.div-button-holder button:hover {
+    background-color: #3b362f;
+    color: #ccc5b2;
+    cursor: pointer;
+}
+
+.div-button-holder p {
+    width: 100%;
+    margin: 0;
+    padding: 15px;
 }

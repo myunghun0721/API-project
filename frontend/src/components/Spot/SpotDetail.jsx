@@ -1,11 +1,12 @@
 import { useParams } from 'react-router-dom'
 import './Spot.css'
 import { useDispatch, useSelector } from 'react-redux'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { fetchSpotDetail } from '../../store/spots'
 import { fetchReviews } from '../../store/reviews'
 import OpenModalMenuItem from '../Navigation/OpenModalMenuItem'
 import PostReviewModal from '../PostReviewModal'
+import DeleteReviewModal from '../DeleteModal/DeleteReviewModal'
 
 
 
@@ -130,13 +131,22 @@ function SpotDetail() {
                 </button>}
 
                 {spotReviews && myArr.map(review => {
-                    // if (Number(review.spotId) === Number(spotId)) {
                     return <div key={review.id} className='div-spot-review'>
                         <h3>{review.User.firstName} {review.User.lastName}</h3>
                         <p>{review.createdAt.split('T')[0]}</p>
                         <p>{review.review}</p>
+                        {sessionUser && review.User.id && sessionUser.id && review.User.id === sessionUser.id &&
+                            <div className="div-button-holder">
+                                <button>
+                                    <OpenModalMenuItem
+                                        itemText="Delete"
+                                        modalComponent={<DeleteReviewModal reviewId={review.id} spotId={spotId} />}
+                                    />
+                                </button>
+                            </div>
+                        }
                     </div>
-                    // }
+
                 })}
                 {/* {spotReviewsArr && spotReviewsArr.map(review => {
                     if (Number(review.spotId) === Number(spotId)) {

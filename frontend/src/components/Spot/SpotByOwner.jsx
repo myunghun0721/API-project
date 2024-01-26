@@ -2,14 +2,15 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSpotByOwner } from "../../store/spotByOwner";
 import { NavLink, useNavigate } from "react-router-dom";
+import OpenModalMenuItem from "../Navigation/OpenModalMenuItem";
 import './SpotByOwner.css'
+import DeleteSpotModal from "../DeleteModal";
 
 function SpotByOwner() {
     const dispatch = useDispatch()
     const spots = useSelector(state => state.current.spot)
     const sessionUser = useSelector(state => state.session.user);
     const navigate = useNavigate()
-    console.log("🚀 ~ SpotByOwner ~ spotArr:", spots)
 
 
     if (!sessionUser) return null
@@ -20,9 +21,12 @@ function SpotByOwner() {
     }, [dispatch, id])
 
 
-    function updateSpot(e, spotId){
+    function updateSpot(e, spotId) {
         e.preventDefault();
         navigate(`/spots/${spotId}/edit`)
+    }
+    function deleteButton(e) {
+        e.preventDefault();
     }
     return (
         <>
@@ -35,10 +39,10 @@ function SpotByOwner() {
                         {/* {console.log(spot)} */}
                         {spot.previewImage !== 'No preview image' ? <img src={`${spot.previewImage}`} alt='animal crossing villager img' /> : <img src='https://placehold.co/315x325' alt='placeholder img' />}
                         <div className='div-spots-description-holder'>
-                            <div className='div-spots-tooltiptext'>
+                            {/* <div className='div-spots-tooltiptext'>
                                 <h3>{spot.name}</h3>
                                 <p>{spot.description}</p>
-                            </div>
+                            </div> */}
                             <div className='div-spots-city-state-rating'>
                                 <p>{spot.city}, {spot.state}</p>
 
@@ -47,7 +51,15 @@ function SpotByOwner() {
                             </div>
                             <label>${spot.price} per night</label>
                             <div className="div-button-holder">
-                                <button onClick={(e) => updateSpot(e, spot.id)}>Update</button>
+                                <button onClick={(e) => updateSpot(e, spot.id)}><p>Update</p></button>
+
+                                <button onClick={(e) => deleteButton(e)}>
+                                    <OpenModalMenuItem
+                                        itemText="Delete"
+                                        //     onItemClick={closeMenu}
+                                        modalComponent={<DeleteSpotModal spotId={spot.id} />}
+                                    />
+                                </button>
                             </div>
                         </div>
                     </NavLink>

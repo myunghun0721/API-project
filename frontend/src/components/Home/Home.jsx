@@ -5,20 +5,21 @@ import { fetchSpots } from '../../store/spots';
 import { NavLink } from 'react-router-dom';
 function Home() {
     const spots = useSelector(state => state.spots)
-    const spotArr = Object.values(spots)
+    const spotArr = spots.spot
     const dispatch = useDispatch()
 
     useEffect(() => {
         dispatch(fetchSpots())
     }, [dispatch])
 
-
+    if(!spots)return null
 
     return (
+
         <>
             <hr />
             <div className='div-spots-container'>
-                {spotArr.map(spot => (
+                {spotArr && spotArr.map(spot => (
                     <NavLink to={`/spots/${spot.id}`} className='div-spots' key={spot.id}>
                         {/* {console.log(spot)} */}
                         {spot.previewImage !== 'No preview image' ? <img src={`${spot.previewImage}`} alt='animal crossing villager img' /> : <img src='https://placehold.co/315x325' alt='placeholder img' />}
