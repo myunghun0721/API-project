@@ -20,14 +20,14 @@ export const postReview = ({ spotId, comment, rating }) => async(dispatch) => {
     const data =  await res.json()
     console.log("🚀 ~ postReview ~ data:", data)
 
-    dispatch(recievePostReview(data))
+    dispatch(fetchReviews(spotId))
     return res;
 }
-const RECIEVE_POST_REVIEW = 'review/POST/RECIEVE_REVIEW'
-export const recievePostReview = (review) => ({
-    type: RECIEVE_POST_REVIEW,
-    review
-})
+// const RECIEVE_POST_REVIEW = 'review/POST/RECIEVE_REVIEW'
+// export const recievePostReview = (review) => ({
+//     type: RECIEVE_POST_REVIEW,
+//     review
+// })
 
 const RECIEVE_REVIEWS = 'reviews/RECIEVE_REVIEWS'
 export const receiveReviews = (reviews) => ({
@@ -46,9 +46,10 @@ const reviewsReducer = (state = {}, action) => {
             }
             return newState
         }
-        case RECIEVE_POST_REVIEW: {
-            return {...state, [action.review.id]: action.review}
-        }
+        // case RECIEVE_POST_REVIEW: {
+        //     // return {...state, [action.review.id]: action.review}
+        //     return state
+        // }
         default:
             return state
     }

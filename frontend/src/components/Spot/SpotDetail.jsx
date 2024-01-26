@@ -17,6 +17,7 @@ function SpotDetail() {
     const spots = useSelector(state => state.spots)
 
     const spotDetail = spots[spotId];
+
     // const [spotDetail, setSpotDetail] = useState("")
 
     if (!spotId) return;
@@ -56,23 +57,26 @@ function SpotDetail() {
 
     const owner = spotDetail.Owner
 
-    // let myArr = []
-    // reviewArr.forEach(spotreview => {
-    //     if (Number(spotreview.spotId) === Number(spotId)) {
-    //         myArr.push(spotreview)
-    //     }
-    // })
-    // myArr.sort(function (a, b) {
-    //     return b.createdAt - a.createdAt
-    // })
 
-    // let firstReview = ""
-    // if (owner && sessionUser && myArr.length === 0) {
-    //     if (owner.id !== sessionUser.id) {
-    //         firstReview = <p>Be the first to post a review!</p>
-    //     }
+    let myArr = []
+    spotReviewsArr.forEach(spotreview => {
+        if (Number(spotreview.spotId) === Number(spotId)) {
+            myArr.push(spotreview)
+        }
+    })
+    myArr.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-    // }
+    let firstReview = ""
+    if (owner && sessionUser && myArr.length === 0) {
+        if (owner.id !== sessionUser.id) {
+            firstReview = <p>Be the first to post a review!</p>
+        }
+
+    }
+
+    const isOwner = sessionUser && spotDetail.ownerId === sessionUser.id
+    const writeReview = sessionUser && myArr.find(review => Number(review.userId) === Number(sessionUser.id))
+    const showButton = sessionUser && !isOwner && !writeReview
 
 
     return (
@@ -118,21 +122,21 @@ function SpotDetail() {
 
                 </div>
 
-                <button id='postReviewButton'>
+                {showButton && <button id='postReviewButton'>
                     <OpenModalMenuItem
                         itemText="Post Your Review"
                         modalComponent={<PostReviewModal spotId={spotId} />}
                     />
-                </button>
+                </button>}
 
-                {spotReviews && Object.values(spotReviews).map(review => {
-                    if (Number(review.spotId) === Number(spotId)) {
-                        return <div key={review.id} className='div-spot-review'>
-                            {/* <h3>{review.User.firstName} {review.User.lastName}</h3> */}
-                            <p>{review.createdAt.split('T')[0]}</p>
-                            <p>{review.review}</p>
-                        </div>
-                    }
+                {spotReviews && myArr.map(review => {
+                    // if (Number(review.spotId) === Number(spotId)) {
+                    return <div key={review.id} className='div-spot-review'>
+                        <h3>{review.User.firstName} {review.User.lastName}</h3>
+                        <p>{review.createdAt.split('T')[0]}</p>
+                        <p>{review.review}</p>
+                    </div>
+                    // }
                 })}
                 {/* {spotReviewsArr && spotReviewsArr.map(review => {
                     if (Number(review.spotId) === Number(spotId)) {
@@ -144,7 +148,7 @@ function SpotDetail() {
                     }
                 })} */}
 
-                {/* {firstReview} */}
+                {firstReview}
             </div>
         </div>
     )
