@@ -1,0 +1,86 @@
+.div-spots-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, auto));
+    gap: 10px;
+    width: 100%;
+    background-color: #C1D7EC;
+
+}
+
+.div-spots {
+    padding: 10px;
+    position: relative;
+}
+
+.div-spots img {
+    width: 90%;
+}
+
+
+a {
+    all: unset;
+    cursor: pointer;
+}
+
+.div-spots {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 8px;
+    margin: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    background-color: #EBEEF1;
+}
+
+.div-spots h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.div-spots p {
+    margin-bottom: 8px;
+}
+
+.div-spots label {
+    font-weight: bold;
+    color: #333;
+}
+
+.div-spots:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.div-spots:hover .div-spots-tooltiptext {
+    visibility: visible;
+}
+
+.div-spots-city-state-rating {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-left: 20px;
+    margin-right: 20px;
+    font-size: 18px;
+}
+.div-spots-city-state-rating .fa-star{
+    color: #f8d71c;
+}
+.div-spots-description-holder label {
+    display: flex;
+    float: left;
+    margin: 20px
+}
+
+.div-spots-tooltiptext {
+    visibility: hidden;
+    color: black;
+    text-align: center;
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    border-radius: 5px;
+    width: 80%;
+}

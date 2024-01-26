@@ -13,15 +13,15 @@ module.exports = {
     await ReviewImage.bulkCreate([
       {
         reviewId: 1,
-        url: "www.reviewImage_test_url1.com"
+        url: "https://soopool.art/image/acnh/ani/Kid%20Cat.jpg"
       },
       {
         reviewId: 2,
-        url: "www.reviewImage_test_url2.com"
+        url: "https://soopool.art/image/acnh/ani/Kabuki.jpg"
       },
       {
         reviewId: 3,
-        url: "www.reviewImage_test_url3.com"
+        url: "https://soopool.art/image/acnh/ani/Puddles.jpg"
       },
 
     ], { validate: true });

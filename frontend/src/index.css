@@ -1,1 +1,28 @@
 /* TODO: Add sitewide styles */
+@import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+
+body {
+    font-family: "Varela Round", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    background-color: #F2F3E3;
+    margin: 0;
+    padding: 0;
+}
+
+button:disabled,
+button[disabled]{
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+}
+.div-review-star-review-count .fa-star,
+.div-center-dot .fa-star{
+  color: #f8d71c;
+}
+h5{
+  clear: both;
+  margin: 0;
+  padding: 0;
+  color: rgb(255, 74, 74);
+}
