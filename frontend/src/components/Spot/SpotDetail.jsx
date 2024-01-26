@@ -19,15 +19,14 @@ function SpotDetail() {
     const spotDetail = spots[spotId];
     // const [spotDetail, setSpotDetail] = useState("")
 
-    if(!spotId) return null
-
+    if (!spotId) return;
     useEffect(() => {
-        dispatch(fetchSpotDetail(spotId))
-    }, [dispatch, spotId, spotReviews])
+        dispatch(fetchSpotDetail(spotId));
+    }, [dispatch, spotId, spotReviews]);
+
 
     useEffect(() => {
         dispatch(fetchReviews(spotId));
-
     }, [dispatch, spotId]);
 
 
@@ -125,7 +124,16 @@ function SpotDetail() {
                         modalComponent={<PostReviewModal spotId={spotId} />}
                     />
                 </button>
-                {console.log(spotReviews)}
+
+                {spotReviews && Object.values(spotReviews).map(review => {
+                    if (Number(review.spotId) === Number(spotId)) {
+                        return <div key={review.id} className='div-spot-review'>
+                            {/* <h3>{review.User.firstName} {review.User.lastName}</h3> */}
+                            <p>{review.createdAt.split('T')[0]}</p>
+                            <p>{review.review}</p>
+                        </div>
+                    }
+                })}
                 {/* {spotReviewsArr && spotReviewsArr.map(review => {
                     if (Number(review.spotId) === Number(spotId)) {
                         return <div key={review.id} className='div-spot-review'>
