@@ -62,7 +62,9 @@ a {
     margin-right: 20px;
     font-size: 18px;
 }
-
+.div-spots-city-state-rating .fa-star{
+    color: #f8d71c;
+}
 .div-spots-description-holder label {
     display: flex;
     float: left;

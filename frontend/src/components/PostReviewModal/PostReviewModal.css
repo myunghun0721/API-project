@@ -1,0 +1,17 @@
+.rating-input {
+    display: flex;
+    margin-right: 4px;
+    font-size: 24px;
+}
+
+.review-item {
+    display: flex;
+}
+
+.rating-input .filled {
+    color: #f8d71c;
+}
+
+.rating-input .empty {
+    color: gray;
+}

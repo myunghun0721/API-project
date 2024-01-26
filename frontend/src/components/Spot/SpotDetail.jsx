@@ -4,33 +4,63 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 import { fetchSpotDetail } from '../../store/spots'
 import { fetchReviews } from '../../store/reviews'
+import OpenModalMenuItem from '../Navigation/OpenModalMenuItem'
+import PostReviewModal from '../PostReviewModal'
+
 
 
 function SpotDetail() {
+    const dispatch = useDispatch()
     const sessionUser = useSelector(state => state.session.user);
     const { spotId } = useParams()
     const reviews = useSelector(state => state.reviews)
+    console.log("🚀 ~ SpotDetail ~ reviews:", reviews)
+
     const spots = useSelector(state => state.spots)
+    console.log("🚀 ~ SpotDetail ~ spots:", spots)
     const reviewArr = Object.values(reviews)
     const spotDetail = spots[spotId];
     const [rating, setRating] = useState(0)
+    const [createReview, setCreateReview] = useState(false)
 
 
     let imgArr;
     let owner;
     let avgRating = 0;
+
+    useEffect(() => {
+        setRating(avgRating)
+        dispatch(fetchSpotDetail(spotId))
+    }, [dispatch, avgRating])
+
+
+    useEffect(() => {
+        setRating(avgRating)
+        dispatch(fetchReviews(spotId))
+    }, [dispatch, avgRating])
+
+
+    useEffect(() => {
+        if (sessionUser && owner) {
+            const reviewed = myArr.find(review => Number(review.userId) === Number(sessionUser.id))
+
+            if (reviewed && reviewed.id || Number(owner.id) === Number(sessionUser.id)) {
+                console.log("reviewed or owner of spot")
+                setCreateReview(false)
+            }
+            else {
+                console.log('not reviewed')
+                setCreateReview(true)
+            }
+        }
+    })
     if (spotDetail) {
         imgArr = spotDetail.SpotImages
         owner = spotDetail.Owner
         avgRating = spotDetail.avgStarRating / spotDetail.numReviews
     }
 
-    const dispatch = useDispatch()
-    useEffect(() => {
-        setRating(avgRating)
-        dispatch(fetchSpotDetail(spotId))
-        dispatch(fetchReviews(spotId))
-    }, [dispatch, avgRating])
+
 
     let myArr = []
     reviewArr.forEach(spotreview => {
@@ -50,25 +80,11 @@ function SpotDetail() {
 
     }
 
-    let createReview = "";
-    if (sessionUser && owner) {
-        const reviewed = myArr.find(review => Number(review.userId) === Number(sessionUser.id))
-        // console.log("I'm user: ", sessionUser.id)
-        if (reviewed && reviewed.id || owner.id == sessionUser.id) {
-            console.log("reviewed or owner of spot")
-        }
-        else {
-            console.log('not reviewed')
-            createReview = <button id='postReviewButton' onClick={postReview}>Post Your Review</button>
-        }
-    }
 
-    function postReview(){
-
-    }
     if (spotDetail) {
         return (
             <div>
+
                 <h2 className='spot-header'>Details of spot: {spotDetail && spotDetail.name}</h2>
                 <div className='div-spotDetail-img-container'>
                     {imgArr && imgArr.map((img) => (
@@ -107,7 +123,15 @@ function SpotDetail() {
                         {myArr.length !== 0 ? <p id='centerDot'>&#183;</p> : null}
                         {myArr.length === 1 ? <h2>{Number(spotDetail.numReviews)} Review</h2> : myArr.length > 1 ? <h2>{Number(spotDetail.numReviews)} reviews</h2> : null}
                     </div>
-                    {createReview}
+                    {createReview && OpenModalMenuItem && spotId && <div id="post-review-button">
+                        <button id='postReviewButton'>
+                            <OpenModalMenuItem
+                                itemText="Post Your Review"
+                                modalComponent={<PostReviewModal spotId={spotId} />}
+                            />
+                        </button>
+                    </div>}
+
                     {reviewArr && reviewArr.map(review => {
                         if (Number(review.spotId) === Number(spotId)) {
                             return <div key={review.id} className='div-spot-review'>
@@ -119,7 +143,6 @@ function SpotDetail() {
                     })}
 
                     {firstReview}
-
                 </div>
             </div>
         )

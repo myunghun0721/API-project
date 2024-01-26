@@ -16,9 +16,9 @@ button[disabled]{
   background-color: #cccccc;
   color: #666666;
 }
-.fa-solid, .fa-star{
+.div-review-star-review-count .fa-star,
+.div-center-dot .fa-star{
   color: #f8d71c;
-
 }
 h5{
   clear: both;

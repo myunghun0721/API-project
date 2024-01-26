@@ -7,11 +7,35 @@ export const fetchReviews = (spotId) => async (dispatch) => {
     dispatch(receiveReviews(reviews))
 }
 
+export const postReview = ({ spotId, comment, rating }) => async(dispatch) => {
+    let star = Number(rating)
+    const res = await csrfFetch(`/api/spots/${spotId}/reviews`, {
+        method: "POST",
+        body: JSON.stringify({
+            review: comment,
+            stars: star,
+        }),
+    });
+
+    const data =  await res.json()
+    console.log("🚀 ~ postReview ~ data:", data)
+
+    dispatch(recievePostReview(data))
+    return res;
+}
+const RECIEVE_POST_REVIEW = 'review/POST/RECIEVE_REVIEW'
+export const recievePostReview = (review) => ({
+    type: RECIEVE_POST_REVIEW,
+    review
+})
+
 const RECIEVE_REVIEWS = 'reviews/RECIEVE_REVIEWS'
 export const receiveReviews = (reviews) => ({
     type: RECIEVE_REVIEWS,
     reviews
 })
+
+
 
 const reviewsReducer = (state = {}, action) => {
     switch (action.type) {
@@ -22,7 +46,9 @@ const reviewsReducer = (state = {}, action) => {
             }
             return newState
         }
-
+        case RECIEVE_POST_REVIEW: {
+            return {...state, [action.review.id]: action.review}
+        }
         default:
             return state
     }

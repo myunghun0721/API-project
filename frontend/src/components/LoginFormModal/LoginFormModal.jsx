@@ -18,9 +18,6 @@ function LoginFormModal() {
       const res = await dispatch(sessionActions.login({ credential, password }))
       if(res.ok){
         closeModal()
-        sessionStorage.setItem("id", credential);
-        sessionStorage.setItem("pass", password);
-
         return res
       }
     }
