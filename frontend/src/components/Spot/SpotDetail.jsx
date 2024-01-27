@@ -21,14 +21,14 @@ function SpotDetail() {
 
     // const [spotDetail, setSpotDetail] = useState("")
 
-    if (!spotId) return;
+
     useEffect(() => {
-        dispatch(fetchSpotDetail(spotId));
-    }, [dispatch, spotId, spotReviews]);
+        if (spotId) dispatch(fetchSpotDetail(spotId));
+    }, [dispatch, spotId]);
 
 
     useEffect(() => {
-        dispatch(fetchReviews(spotId));
+        if (spotId) dispatch(fetchReviews(spotId));
     }, [dispatch, spotId]);
 
 

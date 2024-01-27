@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useModal } from '../../context/Modal';
 import './PostReviewModal.css';
-import { postReview } from '../../store/reviews';
-import { useNavigate } from 'react-router-dom';
+import { fetchReviews, postReview } from '../../store/reviews';
+import { fetchSpotDetail } from '../../store/spots';
 
 function PostReviewModal({spotId}) {
 
@@ -34,6 +34,8 @@ function PostReviewModal({spotId}) {
       }
     })
 
+    dispatch(fetchReviews(spotId));
+    dispatch(fetchSpotDetail(spotId));
     closeModal();
   };
 

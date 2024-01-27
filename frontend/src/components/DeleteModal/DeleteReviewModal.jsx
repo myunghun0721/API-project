@@ -2,6 +2,7 @@ import { useDispatch } from 'react-redux';
 import { useModal } from '../../context/Modal';
 import './DeleteSpotModal.css'
 import { deleteReview, fetchReviews } from '../../store/reviews';
+import { fetchSpotDetail } from '../../store/spots';
 
 function DeleteReviewModal({ reviewId, spotId }) {
     const { closeModal } = useModal();
@@ -14,6 +15,7 @@ function DeleteReviewModal({ reviewId, spotId }) {
     async function yesButton() {
         await dispatch(deleteReview(reviewId))
         await dispatch(fetchReviews(spotId));
+        await dispatch(fetchSpotDetail(spotId));
         closeModal()
     }
     return (

@@ -1,5 +1,4 @@
 import { csrfFetch } from './csrf.js';
-import { fetchSpotByOwner } from './spotByOwner.js';
 
 export const deleteSpot = (spotId) => async (dispatch) => {
     await csrfFetch(`/api/spots/${spotId}`, {
