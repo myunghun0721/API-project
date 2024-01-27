@@ -13,12 +13,10 @@ function SpotByOwner() {
     const navigate = useNavigate()
 
 
-    if (!sessionUser) return null
-    const id = sessionUser.id
 
     useEffect(() => {
         dispatch(fetchSpotByOwner())
-    }, [dispatch, id])
+    }, [dispatch])
 
 
     function updateSpot(e, spotId) {
@@ -49,7 +47,9 @@ function SpotByOwner() {
                                 {spot.avgRating ? <p><i className="fa-solid fa-star"></i>: {spot.avgRating.toFixed(2)}</p> : <p><i className="fa-solid fa-star"></i>: NEW!</p>}
 
                             </div>
+                            <div>
                             <label>${spot.price} per night</label>
+                            </div>
                             <div className="div-button-holder">
                                 <button onClick={(e) => updateSpot(e, spot.id)}><p>Update</p></button>
 

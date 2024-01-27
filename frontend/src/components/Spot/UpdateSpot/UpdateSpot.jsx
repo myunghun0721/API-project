@@ -19,8 +19,6 @@ function UpdateSpot() {
     const [price, setPrice] = useState("")
     const [error, setError] = useState({})
     const spot = useSelector((state) => state.spots);
-    if (!spot) return null
-
     const currentSpot = spot[spotId]
 
 

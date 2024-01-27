@@ -24,6 +24,7 @@
 }
 
 .div-button-holder {
+    clear: both;
     display: flex;
     justify-content: space-evenly;
 }
