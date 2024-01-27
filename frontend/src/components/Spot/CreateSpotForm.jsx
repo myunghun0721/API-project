@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from 'react-redux';
 import './CreateSpot.css'
-import { createSpot, postSpotImg } from "../../store/spots";
+import { createSpot, fetchSpotDetail, postSpotImg } from "../../store/spots";
 import { useNavigate } from "react-router-dom";
 function CreateSpotForm() {
     const dispatch = useDispatch()
@@ -97,6 +97,7 @@ function CreateSpotForm() {
         setImgurl4("")
         setImgurl5("")
 
+        dispatch(fetchSpotDetail(returnSpotId));
         navigate(`/spots/${returnSpotId}`)
     };
 

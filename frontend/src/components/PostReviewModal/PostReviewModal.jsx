@@ -5,7 +5,7 @@ import './PostReviewModal.css';
 import { fetchReviews, postReview } from '../../store/reviews';
 import { fetchSpotDetail } from '../../store/spots';
 
-function PostReviewModal({spotId}) {
+function PostReviewModal({ spotId }) {
 
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
@@ -25,23 +25,23 @@ function PostReviewModal({spotId}) {
       spotId
     }
 
-    dispatch(postReview(form)).catch(async (res)=>{
+    await dispatch(postReview(form)).catch(async (res) => {
       const data = await res.json();
       if (data && data.errors) {
         setErrors(data.errors);
-      }else if(data){
+      } else if (data) {
         setErrors(data)
       }
     })
 
-    dispatch(fetchReviews(spotId));
-    dispatch(fetchSpotDetail(spotId));
+    await dispatch(fetchReviews(spotId));
+    await dispatch(fetchSpotDetail(spotId));
     closeModal();
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     const errorObj = {}
-    if(comment.length < 10){
+    if (comment.length < 10) {
       errorObj.comment = "comment need a minimum of 10 characters"
     }
     setErrors(errorObj)
@@ -53,28 +53,28 @@ function PostReviewModal({spotId}) {
       {errors.message && <h5>{errors.message}</h5>}
       <form className='div-review-modal-form' onSubmit={handleSubmit}>
         <label>
-          <textarea type="textarea" name="comment" value={comment} onChange={(e)=> setComment(e.target.value)} placeholder={"Leave your review here..."} rows="6" cols="55" />
+          <textarea type="textarea" name="comment" value={comment} onChange={(e) => setComment(e.target.value)} placeholder={"Leave your review here..."} rows="6" cols="55" />
         </label>
         {errors.comment && <h5>{errors.comment}</h5>}
         <div className="rating-input">
-        <div onMouseEnter={() => { if (!disabled) setActiveRating(1) }} onMouseLeave={() => { setActiveRating(rating) }} className={activeRating >= 1 ? "filled" : "empty"} >
-          <i onClick={() => setRating(parseInt(1))} className="fa fa-star"></i>
+          <div onMouseEnter={() => { if (!disabled) setActiveRating(1) }} onMouseLeave={() => { setActiveRating(rating) }} className={activeRating >= 1 ? "filled" : "empty"} >
+            <i onClick={() => setRating(parseInt(1))} className="fa fa-star"></i>
+          </div>
+          <div onMouseEnter={() => { if (!disabled) setActiveRating(2) }} onMouseLeave={() => { setActiveRating(rating) }} className={activeRating >= 2 ? "filled" : "empty"} >
+            <i onClick={() => setRating(parseInt(2))} className="fa fa-star"></i>
+          </div>
+          <div onMouseEnter={() => { if (!disabled) setActiveRating(3) }} onMouseLeave={() => { setActiveRating(rating) }} className={activeRating >= 3 ? "filled" : "empty"} >
+            <i onClick={() => setRating(parseInt(3))} className="fa fa-star"></i>
+          </div>
+          <div onMouseEnter={() => { if (!disabled) setActiveRating(4) }} onMouseLeave={() => { setActiveRating(rating) }} className={activeRating >= 4 ? "filled" : "empty"} >
+            <i onClick={() => setRating(parseInt(4))} className="fa fa-star"></i>
+          </div>
+          <div onMouseEnter={() => { if (!disabled) setActiveRating(5) }} onMouseLeave={() => { setActiveRating(rating) }} className={activeRating >= 5 ? "filled" : "empty"} >
+            <i onClick={() => setRating(parseInt(5))} className="fa fa-star"></i>
+          </div>
         </div>
-        <div onMouseEnter={() => { if (!disabled) setActiveRating(2) }} onMouseLeave={() => { setActiveRating(rating) }} className={activeRating >= 2 ? "filled" : "empty"} >
-          <i onClick={() => setRating(parseInt(2))} className="fa fa-star"></i>
-        </div>
-        <div onMouseEnter={() => { if (!disabled) setActiveRating(3) }} onMouseLeave={() => { setActiveRating(rating) }} className={activeRating >= 3 ? "filled" : "empty"} >
-          <i onClick={() => setRating(parseInt(3))} className="fa fa-star"></i>
-        </div>
-        <div onMouseEnter={() => { if (!disabled) setActiveRating(4) }} onMouseLeave={() => { setActiveRating(rating) }} className={activeRating >= 4 ? "filled" : "empty"} >
-          <i onClick={() => setRating(parseInt(4))} className="fa fa-star"></i>
-        </div>
-        <div onMouseEnter={() => { if (!disabled) setActiveRating(5) }} onMouseLeave={() => { setActiveRating(rating) }} className={activeRating >= 5 ? "filled" : "empty"} >
-          <i onClick={() => setRating(parseInt(5))} className="fa fa-star"></i>
-        </div>
-      </div>
 
-      <button type="submit" disabled={Object.values(errors).length > 0}>Submit Your Review</button>
+        <button type="submit" disabled={Object.values(errors).length > 0}>Submit Your Review</button>
       </form>
     </div>
   );
