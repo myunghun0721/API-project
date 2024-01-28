@@ -140,7 +140,7 @@ function SignupFormModal() {
           />
         </label>
         {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
-        <button disabled={!isfilled} type="submit">Sign Up</button>
+        <button disabled={!isfilled} hidden={!isfilled} type="submit">Sign Up</button>
       </form>
     </div>
   );

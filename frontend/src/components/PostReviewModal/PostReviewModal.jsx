@@ -44,8 +44,12 @@ function PostReviewModal({ spotId }) {
     if (comment.length < 10) {
       errorObj.comment = "comment need a minimum of 10 characters"
     }
+    if(Number(activeRating) === 0){
+      errorObj.star = "Stars must be from 1 to 5"
+    }
+
     setErrors(errorObj)
-  }, [comment])
+  }, [comment, activeRating])
 
   return (
     <div className='div-modal-login'>
@@ -73,7 +77,7 @@ function PostReviewModal({ spotId }) {
             <i onClick={() => setRating(parseInt(5))} className="fa fa-star"></i>
           </div>
         </div>
-
+        {errors.star && <h5>{errors.star}</h5>}
         <button type="submit" disabled={Object.values(errors).length > 0}>Submit Your Review</button>
       </form>
     </div>
