@@ -44,7 +44,7 @@ module.exports = {
         lat: -79.7645358,
         lng: 42.4730327,
         name: "Puddles's House",
-        description: "In Animal Crossing: New Horizons, if Puddles is one of the villagers who moved in during the main storyline after the villager house development quest, her house will have a combination of non-craftable furniture, plus items crafted by players during the island development storyline, primarily from the Wooden Block Series. ",
+        description: "In Animal Crossing: New Horizons, if Puddles is one of the villagers who moved in during the main storyline after the villager house development quest, her house will have a combination of non-craftable furniture.",
         price: 80
       },
       {
@@ -152,7 +152,7 @@ module.exports = {
         lat: 22.7645358,
         lng: 188.4730327,
         name: "Shino's House",
-        description: "In Animal Crossing: New Horizons, if Shino is one of the villagers who moved in during the main storyline after the villager house development quest, her house will have a combination of non-craftable furniture, plus items crafted by players during the island development storyline, primarily from the Wooden Block Series. She cannot have her initial house interior unless she moves out of the player's island or the Happy Home Paradise DLC is purchased, in which either the player or Isabelle can reset the interior.",
+        description: "In Animal Crossing: New Horizons, if Shino is one of the villagers who moved in during the main storyline after the villager house development quest, her house will have a combination of non-craftable furniture.",
         price: 800
       },
       {
@@ -176,7 +176,7 @@ module.exports = {
         lat: 15.7645358,
         lng: -15.4730327,
         name: "Sasha's House",
-        description: "In Animal Crossing: New Horizons, if Sasha is one of the villagers who moved in during the main storyline after the villager house development quest, his house will have a combination of non-craftable furniture, plus items crafted by players during the island development storyline, primarily from the Log Series and applicable native fruit sets. He cannot have his initial house interior unless he moves out of the player's island or the Happy Home Paradise DLC is purchased, in which either the player or Isabelle can reset the interior.",
+        description: "In Animal Crossing: New Horizons, if Sasha is one of the villagers who moved in during the main storyline after the villager house development quest, his house will have a combination of non-craftable furniture.",
         price: 250
       },
       {
