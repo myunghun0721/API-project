@@ -20,7 +20,7 @@ module.exports = {
         lat: -87.7645358,
         lng: -122.4730327,
         name: "Kid Cat's House",
-        description: "In Animal Crossing: New Horizons, if Kid Cat is one of the starter villagers, his house will have craftable items primarily from the Wooden Series. He cannot have his initial house interior unless he moves out of the player's island or the Happy Home Paradise DLC is purchased, in which either the player or Isabelle can reset the interior.",
+        description: "In Animal Crossing: New Horizons, if Kid Cat is one of the starter villagers, his house will have craftable items primarily from the Wooden Series.",
         price: 75
       },
       {
@@ -44,7 +44,7 @@ module.exports = {
         lat: -79.7645358,
         lng: 42.4730327,
         name: "Puddles's House",
-        description: "In Animal Crossing: New Horizons, if Puddles is one of the villagers who moved in during the main storyline after the villager house development quest, her house will have a combination of non-craftable furniture, plus items crafted by players during the island development storyline, primarily from the Wooden Block Series. She cannot have her initial house interior unless she moves out of the player's island or the Happy Home Paradise DLC is purchased, in which either the player or Isabelle can reset the interior.",
+        description: "In Animal Crossing: New Horizons, if Puddles is one of the villagers who moved in during the main storyline after the villager house development quest, her house will have a combination of non-craftable furniture, plus items crafted by players during the island development storyline, primarily from the Wooden Block Series. ",
         price: 80
       },
       {
