@@ -14,103 +14,103 @@ module.exports = {
       {
         spotId: 1,
         userId: 1,
-        review: 'test review',
+        review: 'The scenery was breathtaking, and the surroundings are pindrop silent, except for the birds :) The local grounds maintenance were cute (two adorable rabbits!) Jacques Cartier National Park makes for a great day trip near by.',
         stars: 5
       },
       {
         spotId: 1,
         userId: 2,
-        review: 'test review',
+        review: 'The bed, linens and pillows are amazing. I generally shy away from rentals for that reason. This place was great.',
         stars: 5
       },
       {
         spotId: 2,
         userId: 2,
-        review: 'test review',
+        review: "The house was amazing a true Architectural masterpiece! We truly enjoyed our stay, I highly recommend this home if you are looking for a unique experience",
         stars: 4
       },
       {
         spotId: 3,
         userId: 3,
-        review: 'test review',
+        review: 'An amazing experience. Quiet, serenity, inspiring.',
         stars: 3
       },
       {
         spotId: 4,
         userId: 3,
-        review: 'test review',
+        review: 'This was our favorite air bnb experience, we feel privileged to have stayed here.',
         stars: 4
       },
       {
         spotId: 5,
         userId: 3,
-        review: 'test review',
+        review: 'Such a serenely beautiful place.',
         stars: 5
       },
       {
         spotId: 6,
         userId: 2,
-        review: 'test review',
+        review: 'Beautiful place to stay!',
         stars: 3
       },
       {
         spotId: 11,
         userId: 3,
-        review: 'test review',
+        review: 'This place was cozy and beautiful. It was super clean and great. Will definitely book this place again if I had the chance.',
         stars: 1
       },
       {
         spotId: 6,
         userId: 3,
-        review: 'test review',
+        review: 'Awesome cozy little place',
         stars: 2
       },
       {
         spotId: 7,
         userId: 3,
-        review: 'test review',
+        review: 'Amazing! i’d recommend this place to anyone and i would love to come back',
         stars: 4
       },
       {
         spotId: 8,
         userId: 1,
-        review: 'test review',
+        review: "We're definitely visiting again!",
         stars: 4
       },
       {
         spotId: 9,
         userId: 1,
-        review: 'test review',
+        review: 'This was an amazing experience. Beautiful location. Thank you',
         stars: 5
       },
       {
         spotId: 10,
         userId: 1,
-        review: 'test review',
+        review: 'Beautiful house in great location',
         stars: 4
       },
       {
         spotId: 11,
         userId: 1,
-        review: 'test review',
+        review: 'This house was absolutely lovely. Beautiful views, warm, cozy, inviting, great location. ',
         stars: 4
       },
       {
         spotId: 12,
         userId: 1,
-        review: 'test review',
+        review: 'We loved this home. Walked in and the house was noticeably beautiful and well maintained.',
         stars: 3
       },
       {
         spotId: 13,
         userId: 2,
-        review: 'test review',
+        review: 'Home was beautiful and pictures didn’t compare to the views in person. Home was spacious and cozy we felt right at home!',
         stars: 3
       },
       {
         spotId: 14,
         userId: 2,
-        review: 'test review',
+        review: 'Absolutely Gem',
         stars: 4
       },
 
