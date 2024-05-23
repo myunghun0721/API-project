@@ -196,3 +196,6 @@
     flex-direction: column;
     justify-content: center;
 }
+.div-details-owner{
+    width: 70%;
+}

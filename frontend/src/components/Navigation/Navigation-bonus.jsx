@@ -10,7 +10,12 @@ function Navigation({ isLoaded }) {
     <div className='div-navigation-wrapper'>
       <div className='div-navigation-a'>
         <NavLink to="/">
-          <img className='homeImg'src='https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Animal_Crossing_Leaf.svg/504px-Animal_Crossing_Leaf.svg.png' alt='Home img'></img>
+          <img className='homeImg' src='https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Animal_Crossing_Leaf.svg/504px-Animal_Crossing_Leaf.svg.png' alt='Home img'></img>
+        </NavLink>
+      </div>
+      <div>
+        <NavLink to="/">
+          <h2>Welcome to Animal Crossingbnb</h2>
         </NavLink>
       </div>
       {isLoaded && (
