@@ -3,6 +3,12 @@
 # Landing page
 ![image](https://github.com/myunghun0721/API-project/assets/46683500/c98fbf46-ffa2-48e4-8c0f-2af855f6d90a)
 
+# Spot detail page
+![image](https://github.com/myunghun0721/API-project/assets/46683500/7d2a775f-25f9-480c-b481-af3241de32bf)
+![image](https://github.com/myunghun0721/API-project/assets/46683500/b041cfc0-df6f-489b-8b6d-b020a0674851)
+
+
+
 # Login page
 ![image](https://github.com/myunghun0721/API-project/assets/46683500/2e8fec65-6668-4af5-ab5b-807c66d62f94)
 
@@ -11,7 +17,6 @@
 
 # Create a spot page
 ![image](https://github.com/myunghun0721/API-project/assets/46683500/9f2725ee-d63d-4246-925f-82c4bd054838)
-
 
 # Update spot page
 ![image](https://github.com/myunghun0721/API-project/assets/46683500/0b38194d-21d4-49ec-b6d7-ea76fe77ae85)
@@ -25,6 +30,7 @@ https://aa-api-project-7o5y.onrender.com
 ## Spot
 * Logged-in users can create, view, edit, and delete their spots
 * Logged-out users can view spots
+* Logged-in/out users can view spot detail page
 
 ## Review
 * Logged-in users can create, view, edit, and delete their reviews
