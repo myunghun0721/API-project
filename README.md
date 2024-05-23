@@ -1,5 +1,18 @@
 # [AirBnB]
 
+# Landing Page
+![image](https://github.com/myunghun0721/API-project/assets/46683500/c98fbf46-ffa2-48e4-8c0f-2af855f6d90a)
+
+# Login Page
+![image](https://github.com/myunghun0721/API-project/assets/46683500/2e8fec65-6668-4af5-ab5b-807c66d62f94)
+
+# Manage Spots
+![image](https://github.com/myunghun0721/API-project/assets/46683500/9548f764-c320-476f-9130-c2efc213e64d)
+
+# Update Spot
+![image](https://github.com/myunghun0721/API-project/assets/46683500/0b38194d-21d4-49ec-b6d7-ea76fe77ae85)
+
+
 ## Database Schema Design
 
 ![db-schema]
