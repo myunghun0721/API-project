@@ -1,5 +1,51 @@
 # [AirBnB]
 
+# Landing page
+![image](https://github.com/myunghun0721/API-project/assets/46683500/c98fbf46-ffa2-48e4-8c0f-2af855f6d90a)
+
+# Spot detail page
+![image](https://github.com/myunghun0721/API-project/assets/46683500/7d2a775f-25f9-480c-b481-af3241de32bf)
+![image](https://github.com/myunghun0721/API-project/assets/46683500/b041cfc0-df6f-489b-8b6d-b020a0674851)
+
+
+
+# Login page
+![image](https://github.com/myunghun0721/API-project/assets/46683500/2e8fec65-6668-4af5-ab5b-807c66d62f94)
+
+# Manage spots page
+![image](https://github.com/myunghun0721/API-project/assets/46683500/9548f764-c320-476f-9130-c2efc213e64d)
+
+# Create a spot page
+![image](https://github.com/myunghun0721/API-project/assets/46683500/9f2725ee-d63d-4246-925f-82c4bd054838)
+
+# Update spot page
+![image](https://github.com/myunghun0721/API-project/assets/46683500/0b38194d-21d4-49ec-b6d7-ea76fe77ae85)
+
+# Sign-up
+![image](https://github.com/myunghun0721/API-project/assets/46683500/e84f8176-d161-46c4-8d23-2984de6a9c5b)
+
+## Link to live site:
+https://aa-api-project-7o5y.onrender.com
+
+## Spot
+* Logged-in users can create, view, edit, and delete their spots
+* Logged-out users can view spots
+* Logged-in/out users can view spot detail page
+
+## Review
+* Logged-in users can create, view, edit, and delete their reviews
+* Logged-out users can see reviews
+
+## Booking
+* Logged-in users can book spots
+
+### Technologies
+![js](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=JavaScript&logoColor=white)
+![html](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![css](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![react](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![redux](https://img.shields.io/badge/Redux-593D88?style=for-the-badge&logo=redux&logoColor=white)
+
 ## Database Schema Design
 
 ![db-schema]
