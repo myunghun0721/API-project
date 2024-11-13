@@ -1,4 +1,4 @@
-# [AirBnB]
+# [Animal Crossing AirBnB]
 
 # Landing page
 ![image](https://github.com/myunghun0721/API-project/assets/46683500/c98fbf46-ffa2-48e4-8c0f-2af855f6d90a)
